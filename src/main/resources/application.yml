@@ -1,0 +1,18 @@
+server:
+  servlet:
+    context-path: /ad-board
+  port: 8080
+
+spring:
+  r2dbc:
+    url: r2dbc:h2:mem:///~/testdb
+    username: sa
+    password:
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    parameters:
+      schema: ad_board
+    url: jdbc:h2:mem:~/testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;database_to_upper=false;INIT=CREATE SCHEMA IF NOT EXISTS "ad_board"
+    user: sa
+    password:

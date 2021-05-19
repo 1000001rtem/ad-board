@@ -1,0 +1,53 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="create_ad_table" author="Eremin Artem">
+        <createTable tableName="ad_table" remarks="Таблица с объявлениями">
+            <column name="ad_id" type="uuid" remarks="Идентификатор объявления">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ad_theme" type="varchar(255)" remarks="Тема объявления">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ad_text" type="varchar(255)" remarks="Текст объявления">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ad_type" type="varchar(255)" remarks="Тип объявления">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="uuid" remarks="Категория">
+                <constraints nullable="true"/>
+            </column>
+            <column name="active" type="boolean" remarks="Признак активности объявления" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="bigint" remarks="Unix-время начала объявления" defaultValueComputed="${now}">
+                <constraints nullable="true"/>
+            </column>
+            <column name="end_date" type="bigint" remarks="Unix-время окончания объявления">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="create_user" type="varchar"
+                    remarks="Идентификатор пользователя/клиента, который добавлял запись">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_time" type="bigint" defaultValueComputed="${now}"
+                    remarks="Unix-время добавления записи в таблицу">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modify_user" type="varchar"
+                    remarks="Идентификатор пользователя/клиента, который редактировал(включая добваление) запись">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modify_time" type="bigint" defaultValueComputed="${now}"
+                    remarks="Unix-время последней модификации записи">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="ad_table" columnNames="ad_id"
+                       constraintName="pk_ad"/>
+    </changeSet>
+</databaseChangeLog>

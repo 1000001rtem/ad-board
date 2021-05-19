@@ -1,0 +1,15 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+    <property name="now" value="cast(extract(epoch from current_timestamp) * 1000.0 as bigint)"/>
+
+    <changeSet id="create instant type" author="Eremin Artem">
+        <sql>CREATE DOMAIN INSTANT AS BIGINT</sql>
+    </changeSet>
+
+    <include relativeToChangelogFile="true" file="ad/ad.xml"/>
+    <include relativeToChangelogFile="true" file="category/category.xml"/>
+</databaseChangeLog>
