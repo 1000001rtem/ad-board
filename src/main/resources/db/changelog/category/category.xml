@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <changeSet id="create_category_table" author="Eremin Artem">
-        <createTable tableName="category_table" remarks="Таблица с категориями">
+        <createTable tableName="categories" remarks="Таблица с категориями">
             <column name="category_id" type="uuid" remarks="Идентификатор категории">
                 <constraints nullable="false"/>
             </column>
@@ -20,16 +20,16 @@
                     remarks="Unix-время добавления записи в таблицу">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modify_user" type="varchar"
+            <column name="last_modified_user" type="varchar"
                     remarks="Идентификатор пользователя/клиента, который редактировал(включая добваление) запись">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modify_time" type="bigint" defaultValueComputed="${now}"
+            <column name="last_modified_time" type="bigint" defaultValueComputed="${now}"
                     remarks="Unix-время последней модификации записи">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addPrimaryKey tableName="category_table" columnNames="category_id"
+        <addPrimaryKey tableName="categories" columnNames="category_id"
                        constraintName="pk_category"/>
     </changeSet>
 </databaseChangeLog>

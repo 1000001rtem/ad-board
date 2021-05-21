@@ -5,7 +5,7 @@ server:
 
 spring:
   r2dbc:
-    url: r2dbc:h2:mem:///~/testdb
+    url: r2dbc:h2:mem:///~/maindb
     username: sa
     password:
   liquibase:
@@ -13,6 +13,6 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.xml
     parameters:
       schema: ad_board
-    url: jdbc:h2:mem:~/testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;database_to_upper=false;INIT=CREATE SCHEMA IF NOT EXISTS "ad_board"
+    url: jdbc:h2:mem:~/maindb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;database_to_upper=false;INIT=CREATE SCHEMA IF NOT EXISTS "ad_board"
     user: sa
     password:

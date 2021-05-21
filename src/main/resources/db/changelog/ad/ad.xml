@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <changeSet id="create_ad_table" author="Eremin Artem">
-        <createTable tableName="ad_table" remarks="Таблица с объявлениями">
+        <createTable tableName="ads" remarks="Таблица с объявлениями">
             <column name="ad_id" type="uuid" remarks="Идентификатор объявления">
                 <constraints nullable="false"/>
             </column>
@@ -23,7 +23,8 @@
             <column name="active" type="boolean" remarks="Признак активности объявления" defaultValue="true">
                 <constraints nullable="false"/>
             </column>
-            <column name="start_date" type="bigint" remarks="Unix-время начала объявления" defaultValueComputed="${now}">
+            <column name="start_date" type="bigint" remarks="Unix-время начала объявления"
+                    defaultValueComputed="${now}">
                 <constraints nullable="true"/>
             </column>
             <column name="end_date" type="bigint" remarks="Unix-время окончания объявления">
@@ -38,16 +39,16 @@
                     remarks="Unix-время добавления записи в таблицу">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modify_user" type="varchar"
+            <column name="last_modified_user" type="varchar"
                     remarks="Идентификатор пользователя/клиента, который редактировал(включая добваление) запись">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modify_time" type="bigint" defaultValueComputed="${now}"
+            <column name="last_modified_time" type="bigint" defaultValueComputed="${now}"
                     remarks="Unix-время последней модификации записи">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addPrimaryKey tableName="ad_table" columnNames="ad_id"
+        <addPrimaryKey tableName="ads" columnNames="ad_id"
                        constraintName="pk_ad"/>
     </changeSet>
 </databaseChangeLog>
