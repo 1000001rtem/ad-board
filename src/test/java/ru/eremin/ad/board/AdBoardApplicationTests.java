@@ -35,26 +35,26 @@ class AdBoardApplicationTests {
         final DatabaseClient client = template.getDatabaseClient();
         final String categoryId = UUID.randomUUID().toString();
         final String categoryQuery = "INSERT INTO categories (category_id, category_name, create_user, last_modified_user) " +
-                "VALUES " +
-                String.format("('%s','t','t','t')", categoryId);
+            "VALUES " +
+            String.format("('%s','t','t','t')", categoryId);
 
         final Integer categoryUpdated = client.sql(categoryQuery)
-                .fetch()
-                .rowsUpdated()
-                .block();
+            .fetch()
+            .rowsUpdated()
+            .block();
         final String categoryResult = client.sql("SELECT * FROM categories").map(r -> r.get("category_id").toString()).first().block();
         assertEquals(categoryResult, categoryId);
         assertEquals(1, categoryUpdated);
 
         final String adId = UUID.randomUUID().toString();
         final String adQuery = "INSERT INTO ads (ad_id, ad_theme, ad_text, ad_type, category_id, create_user, last_modified_user) " +
-                "VALUES " +
-                String.format("('%s','t','tm','t','%s','t','t')", adId, categoryId);
+            "VALUES " +
+            String.format("('%s','t','tm','FREE','%s','t','t')", adId, categoryId);
 
         final Integer adUpdated = client.sql(adQuery)
-                .fetch()
-                .rowsUpdated()
-                .block();
+            .fetch()
+            .rowsUpdated()
+            .block();
         final String adResult = client.sql("SELECT * FROM ads").map(r -> r.get("ad_id").toString()).first().block();
         assertEquals(adResult, adId);
         assertEquals(1, adUpdated);

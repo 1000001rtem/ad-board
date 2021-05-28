@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;
+import static org.springframework.data.relational.core.query.Update.update;
 
 /**
  * Репозиторий для объявлений
@@ -32,7 +33,18 @@ public class AdRepository {
      */
     public Flux<Ad> findAll() {
         return template.select(Ad.class)
-                .all();
+            .all();
+    }
+
+    /**
+     * Поиск всех активных объявлений
+     *
+     * @return Flux, список всех объявлений
+     */
+    public Flux<Ad> findAllActive() {
+        return template.select(Ad.class)
+            .matching(query(where("active").isTrue()))
+            .all();
     }
 
     /**
@@ -43,8 +55,8 @@ public class AdRepository {
      */
     public Flux<Ad> findByCategoryId(UUID categoryId) {
         return template.select(Ad.class)
-                .matching(query(where("categoryId").is(categoryId)))
-                .all();
+            .matching(query(where("categoryId").is(categoryId)))
+            .all();
     }
 
     /**
@@ -54,8 +66,8 @@ public class AdRepository {
      */
     public Mono<Ad> findById(UUID id) {
         return template.selectOne(
-                query(where("ad_id").is(id)),
-                Ad.class
+            query(where("ad_id").is(id)),
+            Ad.class
         );
     }
 
@@ -67,7 +79,7 @@ public class AdRepository {
      */
     public Mono<Ad> insert(Ad ad) {
         return template.insert(Ad.class)
-                .using(ad);
+            .using(ad);
     }
 
     /**
@@ -76,8 +88,44 @@ public class AdRepository {
      * @param ad объект объявления
      * @return Mono, обновлённое объявление
      */
-    public Mono<Ad> update(Ad ad) {
+    public Mono<Ad> updateAd(Ad ad) {
         return template.update(ad);
+    }
+
+    /**
+     * Деактивировать объявление
+     *
+     * @param id индентификатор объявления
+     * @return Mono, количество изменнёных записей или ошибку если кол-во отлично от 1.
+     */
+    public Mono<Integer> deactivate(UUID id) {
+        return template.update(Ad.class)
+            .matching(query(where("ad_id").is(id)))
+            .apply(update("active", false))
+            .handle((it, sink) -> {
+                if (it != 1) {
+                    sink.error(new RuntimeException());
+                }
+                sink.next(it);
+            });
+    }
+
+    /**
+     * Активация объявление
+     *
+     * @param id индентификатор объявления
+     * @return Mono, количество изменнёных записей или ошибку если кол-во отлично от 1.
+     */
+    public Mono<Integer> activate(UUID id) {
+        return template.update(Ad.class)
+            .matching(query(where("ad_id").is(id)))
+            .apply(update("active", true))
+            .handle((it, sink) -> {
+                if (it != 1) {
+                    sink.error(new RuntimeException());
+                }
+                sink.next(it);
+            });
     }
 
 }

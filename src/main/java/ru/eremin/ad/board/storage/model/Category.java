@@ -25,4 +25,8 @@ public class Category extends AbstractTable {
 
     @Column("category_name")
     private String categoryName;
+
+    public Category(final String categoryName) {
+        this.categoryName = categoryName;
+    }
 }
