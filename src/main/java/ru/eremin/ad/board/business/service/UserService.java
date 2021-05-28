@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.business;
+package ru.eremin.ad.board.business.service;
 
 import org.springframework.stereotype.Service;
 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.lang.NonNull;
 import ru.eremin.ad.board.storage.model.Ad;
 import ru.eremin.ad.board.storage.model.enumirate.AdType;
 
@@ -24,7 +25,7 @@ public class AdDto {
     private Instant startDate;
     private Instant endDate;
 
-    public AdDto(Ad ad) {
+    public AdDto(@NonNull Ad ad) {
         this.id = ad.getId();
         this.theme = ad.getTheme();
         this.text = ad.getText();
