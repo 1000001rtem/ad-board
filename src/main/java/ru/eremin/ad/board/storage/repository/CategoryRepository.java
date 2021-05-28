@@ -32,7 +32,7 @@ public class CategoryRepository {
      */
     public Flux<Category> findAll() {
         return template.select(Category.class)
-                .all();
+            .all();
     }
 
     /**
@@ -43,8 +43,8 @@ public class CategoryRepository {
      */
     public Mono<Category> findById(UUID id) {
         return template.selectOne(
-                Query.query(where("category_id").is(id)),
-                Category.class
+            Query.query(where("category_id").is(id)),
+            Category.class
         );
     }
 
@@ -56,7 +56,7 @@ public class CategoryRepository {
      */
     public Mono<Category> insert(Category category) {
         return template.insert(Category.class)
-                .using(category);
+            .using(category);
     }
 
     /**
