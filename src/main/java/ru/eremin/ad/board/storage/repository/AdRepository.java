@@ -29,7 +29,7 @@ public class AdRepository {
     /**
      * Поиск всех объявлений
      *
-     * @return Flux, список всех обхявлений
+     * @return {@link Flux} список всех обхявлений
      */
     public Flux<Ad> findAll() {
         return template.select(Ad.class)
@@ -39,7 +39,7 @@ public class AdRepository {
     /**
      * Поиск всех активных объявлений
      *
-     * @return Flux, список всех объявлений
+     * @return {@link Flux} список всех объявлений
      */
     public Flux<Ad> findAllActive() {
         return template.select(Ad.class)
@@ -51,7 +51,7 @@ public class AdRepository {
      * Поиск всех объявлений в категории
      *
      * @param categoryId идентификатор каотегории
-     * @return Flux, список всех объявлений в категории
+     * @return {@link Flux} список всех объявлений в категории
      */
     public Flux<Ad> findByCategoryId(UUID categoryId) {
         return template.select(Ad.class)
@@ -63,6 +63,7 @@ public class AdRepository {
      * Поиск объявления по id
      *
      * @param id индентификатор объявления
+     * @return {@link Mono} объявление
      */
     public Mono<Ad> findById(UUID id) {
         return template.selectOne(
@@ -75,7 +76,7 @@ public class AdRepository {
      * Сохранение объявления
      *
      * @param ad объект объявления
-     * @return Mono, сохранённое объявление
+     * @return {@link Mono} сохранённое объявление
      */
     public Mono<Ad> insert(Ad ad) {
         return template.insert(Ad.class)
@@ -86,7 +87,7 @@ public class AdRepository {
      * Обновление объявления
      *
      * @param ad объект объявления
-     * @return Mono, обновлённое объявление
+     * @return {@link Mono} обновлённое объявление
      */
     public Mono<Ad> updateAd(Ad ad) {
         return template.update(ad);
@@ -96,7 +97,7 @@ public class AdRepository {
      * Деактивировать объявление
      *
      * @param id индентификатор объявления
-     * @return Mono, количество изменнёных записей или ошибку если кол-во отлично от 1.
+     * @return {@link Mono} количество изменнёных записей или ошибку если кол-во отлично от 1.
      */
     public Mono<Integer> deactivate(UUID id) {
         return template.update(Ad.class)
@@ -114,7 +115,7 @@ public class AdRepository {
      * Активация объявление
      *
      * @param id индентификатор объявления
-     * @return Mono, количество изменнёных записей или ошибку если кол-во отлично от 1.
+     * @return {@link Mono} количество изменнёных записей или ошибку если кол-во отлично от 1.
      */
     public Mono<Integer> activate(UUID id) {
         return template.update(Ad.class)

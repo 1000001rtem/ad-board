@@ -28,7 +28,7 @@ public class CategoryRepository {
     /**
      * Поиск всех категорий.
      *
-     * @return Flux, список всех категорий
+     * @return {@link Flux} список всех категорий
      */
     public Flux<Category> findAll() {
         return template.select(Category.class)
@@ -39,7 +39,7 @@ public class CategoryRepository {
      * Поиск категории по id
      *
      * @param id индентификатор категории
-     * @return Mono, найденный объект или Mono.empty, если не найден
+     * @return {@link Mono} найденный объект или Mono.empty, если не найден
      */
     public Mono<Category> findById(UUID id) {
         return template.selectOne(
@@ -52,7 +52,7 @@ public class CategoryRepository {
      * Сохранение категории
      *
      * @param category объект категории
-     * @return Mono, сохранённая категория
+     * @return {@link Mono} сохранённая категория
      */
     public Mono<Category> insert(Category category) {
         return template.insert(Category.class)
@@ -63,7 +63,7 @@ public class CategoryRepository {
      * Обновление категории
      *
      * @param category объект категории
-     * @return Mono, обновлённая категория
+     * @return {@link Mono} обновлённая категория
      */
     public Mono<Category> update(Category category) {
         return template.update(category);
