@@ -13,11 +13,11 @@ import org.springframework.lang.NonNull;
 import java.util.UUID;
 
 @Data
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("categories")
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = false)
 public class Category extends AbstractTable {
 
     @Id

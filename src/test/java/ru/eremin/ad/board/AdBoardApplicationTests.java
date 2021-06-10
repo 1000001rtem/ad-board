@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AdBoardApplicationTests {
 
     @Autowired
@@ -38,7 +38,7 @@ class AdBoardApplicationTests {
             "VALUES " +
             String.format("('%s','t','t','t')", categoryId);
 
-        final Integer categoryUpdated = client.sql(categoryQuery)
+        final int categoryUpdated = client.sql(categoryQuery)
             .fetch()
             .rowsUpdated()
             .block();
@@ -51,7 +51,7 @@ class AdBoardApplicationTests {
             "VALUES " +
             String.format("('%s','t','tm','FREE','%s','t','t')", adId, categoryId);
 
-        final Integer adUpdated = client.sql(adQuery)
+        final int adUpdated = client.sql(adQuery)
             .fetch()
             .rowsUpdated()
             .block();

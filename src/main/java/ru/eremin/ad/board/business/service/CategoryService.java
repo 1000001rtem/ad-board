@@ -1,0 +1,66 @@
+package ru.eremin.ad.board.business.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import ru.eremin.ad.board.business.service.dto.CategoryDto;
+import ru.eremin.ad.board.controller.dto.CreateCategoryRequest;
+import ru.eremin.ad.board.storage.model.Category;
+import ru.eremin.ad.board.storage.repository.CategoryRepository;
+
+import java.util.UUID;
+
+import static ru.eremin.ad.board.util.error.Errors.BAD_REQUEST;
+
+/**
+ * Сервис для работы с категориями объявлений.
+ */
+@Service
+public class CategoryService {
+
+    private final CategoryRepository repository;
+
+    @Autowired
+    public CategoryService(final CategoryRepository repository) {
+        this.repository = repository;
+    }
+
+    /**
+     * Найти все категории.
+     *
+     * @return [Flux] cписок всех категорий
+     */
+    public Flux<CategoryDto> findAll() {
+        return repository.findAll()
+            .map(CategoryDto::new);
+    }
+
+    /**
+     * Найти категорию по идентификатору.
+     *
+     * @param id идентификатор категории
+     * @return {@link Mono} категория
+     */
+    public Mono<Category> findById(UUID id) {
+        if (id == null) return Mono.error(BAD_REQUEST.format("id").asException());
+        return repository.findById(id);
+    }
+
+    /**
+     * Создание новой категории.
+     * Если в запросе указано пустое имя категории, то будет возвращён {@link reactor.core.publisher.MonoError}.
+     *
+     * @param request запрос на создание категории
+     * @return {@link Mono} Идентификатор новой категории
+     */
+    public Mono<UUID> create(CreateCategoryRequest request) {
+        if (request.getCategoryName() == null
+            || request.getCategoryName().isBlank()
+        ) {
+            return Mono.error(new RuntimeException());
+        }
+        return repository.insert(new Category(request.getCategoryName()))
+            .map(Category::getId);
+    }
+}
