@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.dto.CategoryDto;
-import ru.eremin.ad.board.controller.dto.CreateCategoryRequest;
 import ru.eremin.ad.board.storage.model.Category;
 import ru.eremin.ad.board.storage.repository.CategoryRepository;
 
@@ -42,7 +41,7 @@ public class CategoryService {
      * @param id идентификатор категории
      * @return {@link Mono} категория
      */
-    public Mono<Category> findById(UUID id) {
+    public Mono<Category> findById(final UUID id) {
         if (id == null) return Mono.error(BAD_REQUEST.format("id").asException());
         return repository.findById(id);
     }
@@ -51,16 +50,16 @@ public class CategoryService {
      * Создание новой категории.
      * Если в запросе указано пустое имя категории, то будет возвращён {@link reactor.core.publisher.MonoError}.
      *
-     * @param request запрос на создание категории
+     * @param name Имя для новой категории
      * @return {@link Mono} Идентификатор новой категории
      */
-    public Mono<UUID> create(CreateCategoryRequest request) {
-        if (request.getCategoryName() == null
-            || request.getCategoryName().isBlank()
+    public Mono<UUID> create(final String name) {
+        if (name == null
+            || name.isBlank()
         ) {
             return Mono.error(new RuntimeException());
         }
-        return repository.insert(new Category(request.getCategoryName()))
+        return repository.insert(new Category(name))
             .map(Category::getId);
     }
 }
