@@ -76,6 +76,18 @@ public class AdService {
     }
 
     /**
+     * Найти все активные объявления в заданной категории.
+     *
+     * @param categoryId Идентификатор категории
+     * @return {@link Flux} список объявлений (dto)
+     */
+    public Flux<AdDto> findAllActiveByCategory(final UUID categoryId) {
+        return repository.findByCategoryId(categoryId)
+            .map(AdDto::new)
+            .subscribeOn(Schedulers.boundedElastic());
+    }
+
+    /**
      * Создание нового объявления.
      * Если в запросе указана несуществующая группа, будет возвращён {@link reactor.core.publisher.MonoError}.
      * Выполняется транзакционно.
@@ -83,7 +95,7 @@ public class AdService {
      * @param request запрос на создание
      * @return {@link Mono} Идентификатор созданного объявления
      */
-    public Mono<UUID> create(CreateAdRequest request) {
+    public Mono<UUID> create(final CreateAdRequest request) {
         return validateCreateRequest(request)
             .then(checkCategoryExist(request.getCategoryId()))
             .flatMap(categoryId -> {
@@ -110,7 +122,7 @@ public class AdService {
      * @param request запрос на обновление
      * @return {@link Mono} Идентификатор обновлённого объявления
      */
-    public Mono<UUID> updateAd(UpdateAdRequest request) {
+    public Mono<UUID> updateAd(final UpdateAdRequest request) {
         return Mono.just(request)
             .flatMap(req -> {
                 if (req.getId() == null) Mono.error(BAD_REQUEST.format("id").asException());
@@ -143,7 +155,7 @@ public class AdService {
      * @param request запрос на обновление
      * @return {@link Mono} Идентификатор обновлённого объявления
      */
-    public Mono<UUID> upgradeAd(UpgradeAdRequest request) {
+    public Mono<UUID> upgradeAd(final UpgradeAdRequest request) {
         return Mono.just(request)
             .flatMap(req -> {
                 if (req.getId() == null) Mono.error(BAD_REQUEST.format("id").asException());
@@ -162,7 +174,7 @@ public class AdService {
             .subscribeOn(Schedulers.boundedElastic());
     }
 
-    private Mono<Ad> deactivateIfOverdue(Ad ad) {
+    private Mono<Ad> deactivateIfOverdue(final Ad ad) {
         return Mono.just(ad)
             .flatMap(it -> {
                 if (AdType.PAID.equals(ad.getType()) && ad.getEndDate().isBefore(Instant.now())) {
@@ -191,7 +203,7 @@ public class AdService {
             });
     }
 
-    private Mono<UUID> checkCategoryExist(UUID categoryId) {
+    private Mono<UUID> checkCategoryExist(final UUID categoryId) {
         return categoryService.findById(categoryId)
             .switchIfEmpty(Mono.error(CATEGORY_DOES_NOT_EXIST.format(categoryId.toString()).asException()))
             .map(Category::getId);
