@@ -55,7 +55,12 @@ public class AdRepository {
      */
     public Flux<Ad> findByCategoryId(UUID categoryId) {
         return template.select(Ad.class)
-            .matching(query(where("categoryId").is(categoryId)))
+            .matching(
+                query(
+                    where("categoryId").is(categoryId)
+                        .and(where("active").isTrue())
+                )
+            )
             .all();
     }
 
