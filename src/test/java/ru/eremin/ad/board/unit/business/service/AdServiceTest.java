@@ -33,6 +33,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ru.eremin.ad.board.util.TestUtils.defaultAd;
 
 public class AdServiceTest {
     private AdRepository adRepository;
@@ -226,7 +227,6 @@ public class AdServiceTest {
             .expectErrorMatches(error -> {
                 assertTrue(error instanceof AdBoardException);
                 assertEquals(Errors.AD_DOES_NOT_EXIST.name(), ((AdBoardException) error).getCode());
-                System.out.println(error.getMessage() + " " + id.toString());
                 assertTrue(error.getMessage().contains(id.toString()));
                 return true;
             })
@@ -254,14 +254,5 @@ public class AdServiceTest {
             Instant.now().truncatedTo(ChronoUnit.DAYS),
             captor.getValue().getEndDate().minus(5, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS)
         );
-    }
-
-    private Ad defaultAd() {
-        return new Ad()
-            .setTheme("test theme")
-            .setText("test text")
-            .setType(AdType.FREE)
-            .setCategoryId(UUID.randomUUID())
-            .setStartDate(Instant.now());
     }
 }

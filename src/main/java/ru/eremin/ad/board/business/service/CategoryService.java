@@ -28,7 +28,7 @@ public class CategoryService {
     /**
      * Найти все категории.
      *
-     * @return [Flux] cписок всех категорий
+     * @return {@link Flux} cписок всех категорий
      */
     public Flux<CategoryDto> findAll() {
         return repository.findAll()
