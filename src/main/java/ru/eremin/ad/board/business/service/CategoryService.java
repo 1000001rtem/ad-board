@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 import ru.eremin.ad.board.business.service.dto.CategoryDto;
 import ru.eremin.ad.board.storage.model.Category;
 import ru.eremin.ad.board.storage.repository.CategoryRepository;
@@ -32,7 +33,8 @@ public class CategoryService {
      */
     public Flux<CategoryDto> findAll() {
         return repository.findAll()
-            .map(CategoryDto::new);
+            .map(CategoryDto::new)
+            .subscribeOn(Schedulers.boundedElastic());
     }
 
     /**
@@ -43,7 +45,8 @@ public class CategoryService {
      */
     public Mono<Category> findById(final UUID id) {
         if (id == null) return Mono.error(BAD_REQUEST.format("id").asException());
-        return repository.findById(id);
+        return repository.findById(id)
+            .subscribeOn(Schedulers.boundedElastic());
     }
 
     /**
@@ -60,6 +63,7 @@ public class CategoryService {
             return Mono.error(new RuntimeException());
         }
         return repository.insert(new Category(name))
-            .map(Category::getId);
+            .map(Category::getId)
+            .subscribeOn(Schedulers.boundedElastic());
     }
 }
