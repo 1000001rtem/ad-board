@@ -8,15 +8,16 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.lang.NonNull;
 
 import java.util.UUID;
 
 @Data
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("categories")
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = false)
 public class Category extends AbstractTable {
 
     @Id
@@ -25,4 +26,8 @@ public class Category extends AbstractTable {
 
     @Column("category_name")
     private String categoryName;
+
+    public Category(@NonNull final String categoryName) {
+        this.categoryName = categoryName;
+    }
 }

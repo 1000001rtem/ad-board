@@ -6,7 +6,7 @@ import org.springframework.data.r2dbc.mapping.event.BeforeConvertCallback;
 import org.springframework.data.relational.core.sql.SqlIdentifier;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import ru.eremin.ad.board.business.UserService;
+import ru.eremin.ad.board.business.service.UserService;
 import ru.eremin.ad.board.storage.model.AbstractTable;
 import ru.eremin.ad.board.storage.model.Ad;
 import ru.eremin.ad.board.storage.model.Category;

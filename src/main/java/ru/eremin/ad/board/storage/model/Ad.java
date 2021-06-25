@@ -15,10 +15,10 @@ import java.util.UUID;
 
 @Data
 @Table("ads")
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
 public class Ad extends AbstractTable {
 
     @Id
@@ -38,10 +38,10 @@ public class Ad extends AbstractTable {
     private UUID categoryId;
 
     @Column("active")
-    private boolean active;
+    private boolean active = true;
 
     @Column("start_date")
-    private Instant startDate;
+    private Instant startDate = Instant.now();
 
     @Column("end_date")
     private Instant endDate;

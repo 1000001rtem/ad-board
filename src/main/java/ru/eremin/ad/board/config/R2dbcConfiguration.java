@@ -19,10 +19,10 @@ public class R2dbcConfiguration {
     @Bean
     public R2dbcCustomConversions r2dbcCustomConversions() {
         return new R2dbcCustomConversions(
-                List.of(
-                        new InstantReadingConverter(),
-                        new InstantWritingConverter()
-                )
+            List.of(
+                new InstantReadingConverter(),
+                new InstantWritingConverter()
+            )
         );
     }
 }
