@@ -17,7 +17,7 @@ import ru.eremin.ad.board.controller.dto.UpgradeAdRequest;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/ad")
+@RequestMapping("/api/v1/ad")
 public class AdController {
 
     private final AdService service;
