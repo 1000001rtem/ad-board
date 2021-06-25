@@ -30,8 +30,10 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest
@@ -71,6 +73,8 @@ public class AdControllerTest {
             TestUtils.defaultAd().setCategoryId(categoryId),
             TestUtils.defaultAd().setCategoryId(categoryId),
             TestUtils.defaultAd().setCategoryId(categoryId),
+            TestUtils.defaultAd().setCategoryId(categoryId).setActive(false),
+            TestUtils.defaultAd().setCategoryId(categoryId).setActive(false),
             TestUtils.defaultAd(),
             TestUtils.defaultAd(),
             TestUtils.defaultAd()
@@ -88,6 +92,46 @@ public class AdControllerTest {
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
             .jsonPath("$.length()").isEqualTo(3);
+    }
+
+    @Test
+    void should_filter_and_deactivate_overdue_ads() throws JsonProcessingException {
+        UUID categoryId = categoryRepository.insert(new Category("test")).block().getId();
+
+        List.of(
+            TestUtils.defaultAd().setCategoryId(categoryId),
+            TestUtils.defaultAd().setCategoryId(categoryId),
+            TestUtils.defaultAd().setCategoryId(categoryId),
+            TestUtils.defaultAd().setCategoryId(categoryId).setType(AdType.PAID).setEndDate(Instant.now().plus(42, ChronoUnit.DAYS)),
+            TestUtils.defaultAd().setCategoryId(categoryId).setType(AdType.PAID).setEndDate(Instant.now().plus(1, ChronoUnit.MINUTES)),
+            TestUtils.defaultAd().setCategoryId(categoryId).setText("noop").setType(AdType.PAID).setEndDate(Instant.now().minus(1, ChronoUnit.DAYS)), // должен отфильтроваться
+            TestUtils.defaultAd().setCategoryId(categoryId).setText("noop").setType(AdType.PAID).setEndDate(Instant.now().minus(1, ChronoUnit.MINUTES)), // должен отфильтроваться
+            TestUtils.defaultAd(),
+            TestUtils.defaultAd(),
+            TestUtils.defaultAd()
+        ).forEach(ad -> adRepository.insert(ad).block());
+
+        client.get()
+            .uri(uriBuilder ->
+                uriBuilder
+                    .path("/api/v1/ad/find-by-category")
+                    .queryParam("category-id", categoryId)
+                    .build()
+            )
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .consumeWith(TestUtils.logConsumer(mapper, log))
+            .jsonPath("$.length()").isEqualTo(5);
+
+        List<Ad> result = adRepository.findAll().collectList().block()
+            .stream()
+            .filter(it -> !it.isActive())
+            .collect(Collectors.toList());
+
+        assertEquals(2, result.size());
+        assertTrue(result.stream().map(it -> it.getText()).collect(Collectors.toList()).containsAll(List.of("noop", "noop")));
+
     }
 
     @Test

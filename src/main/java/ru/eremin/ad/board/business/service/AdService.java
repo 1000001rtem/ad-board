@@ -77,13 +77,17 @@ public class AdService {
 
     /**
      * Найти все активные объявления в заданной категории.
+     * Для платных объявлений проверяется срок действия с последующей деактивацией, если просрочено.
+     * Выполняется транзакционно.
      *
      * @param categoryId Идентификатор категории
      * @return {@link Flux} список объявлений (dto)
      */
     public Flux<AdDto> findAllActiveByCategory(final UUID categoryId) {
         return repository.findByCategoryId(categoryId)
+            .filterWhen(ad -> deactivateIfOverdue(ad).map(Ad::isActive))
             .map(AdDto::new)
+            .as(transactionalOperator::transactional)
             .subscribeOn(Schedulers.boundedElastic());
     }
 

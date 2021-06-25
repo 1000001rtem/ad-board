@@ -102,13 +102,19 @@ public class AdServiceTest {
         );
 
         when(adRepository.findAllActive()).thenReturn(Flux.fromIterable(ads));
+        when(adRepository.findByCategoryId(any())).thenReturn(Flux.fromIterable(ads));
         when(adRepository.deactivate(any())).thenReturn(Mono.just(1));
 
         List<AdDto> result = subj.findAllActive().collectList().block();
 
         assertEquals(4, result.size());
         assertEquals(0, result.stream().filter(it -> !it.isActive()).count());
-        verify(adRepository, times(2)).deactivate(any());
+
+        List<AdDto> result2 = subj.findAllActiveByCategory(ads.get(0).getCategoryId()).collectList().block();
+
+        assertEquals(4, result2.size());
+        assertEquals(0, result2.stream().filter(it -> !it.isActive()).count());
+        verify(adRepository, times(4)).deactivate(any());
     }
 
     //create
