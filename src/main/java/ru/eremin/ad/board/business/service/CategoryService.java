@@ -6,6 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import ru.eremin.ad.board.business.service.dto.CategoryDto;
+import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
 import ru.eremin.ad.board.storage.model.Category;
 import ru.eremin.ad.board.storage.repository.CategoryRepository;
 
@@ -53,13 +54,12 @@ public class CategoryService {
      * Создание новой категории.
      * Если в запросе указано пустое имя категории, то будет возвращён {@link reactor.core.publisher.MonoError}.
      *
-     * @param name Имя для новой категории
+     * @param request Запрос на создание новой категории
      * @return {@link Mono} Идентификатор новой категории
      */
-    public Mono<UUID> create(final String name) {
-        if (name == null
-            || name.isBlank()
-        ) {
+    public Mono<UUID> create(final CreateCategoryRequest request){
+        final String name = request.getCategoryName();
+        if (name == null || name.isBlank()) {
             return Mono.error(new RuntimeException());
         }
         return repository.insert(new Category(name))

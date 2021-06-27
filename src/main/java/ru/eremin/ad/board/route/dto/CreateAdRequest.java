@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.controller.dto;
+package ru.eremin.ad.board.route.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
