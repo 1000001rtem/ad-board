@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.controller.dto;
+package ru.eremin.ad.board.route.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +10,9 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateAdRequest {
+public class UpgradeAdRequest {
     @Nullable
     private UUID id;
-    private String newTheme = null;
-    private String newText = null;
-    private UUID newCategoryId = null;
+    @Nullable
+    private Long duration;
 }

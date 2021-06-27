@@ -16,7 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.test.StepVerifier;
-import ru.eremin.ad.board.controller.dto.CreateCategoryRequest;
+import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
 import ru.eremin.ad.board.storage.model.Category;
 import ru.eremin.ad.board.storage.repository.CategoryRepository;
 import ru.eremin.ad.board.util.TestUtils;
