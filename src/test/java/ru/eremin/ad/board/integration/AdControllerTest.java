@@ -91,7 +91,7 @@ public class AdControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$.length()").isEqualTo(3);
+            .jsonPath("$.data.length()").isEqualTo(3);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class AdControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$.length()").isEqualTo(5);
+            .jsonPath("$.data.length()").isEqualTo(5);
 
         List<Ad> result = adRepository.findAll().collectList().block()
             .stream()
@@ -154,7 +154,7 @@ public class AdControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$").value((String value) -> {
+            .jsonPath("$.data").value((String value) -> {
                 StepVerifier.create(adRepository.findAll())
                     .expectNextMatches(next -> {
                         assertEquals(UUID.fromString(value), next.getId());
@@ -179,7 +179,7 @@ public class AdControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$").value((String value) -> {
+            .jsonPath("$.data").value((String value) -> {
                 StepVerifier.create(adRepository.findById(UUID.fromString(value)))
                     .expectNextMatches(next -> {
                         assertEquals(UUID.fromString(value), next.getId());
@@ -205,7 +205,7 @@ public class AdControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$").value((String value) -> {
+            .jsonPath("$.data").value((String value) -> {
                 StepVerifier.create(adRepository.findById(UUID.fromString(value)))
                     .expectNextMatches(next -> {
                         assertEquals(UUID.fromString(value), next.getId());
@@ -240,7 +240,7 @@ public class AdControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$.code").isEqualTo("CATEGORY_DOES_NOT_EXIST")
-            .jsonPath("$.message").isEqualTo("Category with id " + categoryId + " does not exist");
+            .jsonPath("$.error.code").isEqualTo("CATEGORY_DOES_NOT_EXIST")
+            .jsonPath("$.error.message").isEqualTo("Category with id " + categoryId + " does not exist");
     }
 }

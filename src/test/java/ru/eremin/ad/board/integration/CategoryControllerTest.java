@@ -66,7 +66,7 @@ public class CategoryControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$.length()").isEqualTo("3");
+            .jsonPath("$.data.length()").isEqualTo("3");
     }
 
     @Test
@@ -79,7 +79,7 @@ public class CategoryControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$").value((String value) -> {
+            .jsonPath("$.data").value((String value) -> {
                 StepVerifier.create(repository.findAll())
                     .expectNextMatches(next -> {
                         assertEquals(UUID.fromString(value), next.getId());

@@ -9,6 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.CategoryService;
 import ru.eremin.ad.board.business.service.dto.CategoryDto;
+import ru.eremin.ad.board.route.dto.AdBoardResponseItem;
 import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
 import ru.eremin.ad.board.util.transformer.ResponseTransformers;
 
@@ -29,7 +30,7 @@ public class CategoryHandler {
             .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(result)
+                    .bodyValue(AdBoardResponseItem.success(result))
             )
             .transform(ResponseTransformers.errorResponseTransformer());
     }
@@ -37,10 +38,10 @@ public class CategoryHandler {
     public Mono<ServerResponse> create(ServerRequest request) {
         return request.bodyToMono(CreateCategoryRequest.class)
             .flatMap(service::create)
-            .flatMap(response ->
+            .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(response)
+                    .bodyValue(AdBoardResponseItem.success(result))
             )
             .transform(ResponseTransformers.errorResponseTransformer());
     }

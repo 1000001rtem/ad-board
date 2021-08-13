@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import ru.eremin.ad.board.route.dto.AdBoardResponseItem;
 import ru.eremin.ad.board.route.dto.ErrorResponse;
 import ru.eremin.ad.board.util.error.AdBoardException;
 import ru.eremin.ad.board.util.error.CriticalException;
@@ -28,7 +29,7 @@ public class ResponseTransformers {
                         .setMessage(error.getMessage());
                     return ServerResponse.status(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(errorResponse);
+                        .bodyValue(AdBoardResponseItem.error(errorResponse));
                 } else {
                     final CriticalException error = new CriticalException(err);
                     final ErrorResponse errorResponse = new ErrorResponse()
@@ -37,7 +38,7 @@ public class ResponseTransformers {
                     err.printStackTrace();
                     return ServerResponse.status(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(errorResponse);
+                        .bodyValue(AdBoardResponseItem.error(errorResponse));
                 }
             });
     }

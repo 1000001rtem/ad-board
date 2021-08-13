@@ -6,6 +6,7 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.AdService;
+import ru.eremin.ad.board.route.dto.AdBoardResponseItem;
 import ru.eremin.ad.board.route.dto.CreateAdRequest;
 import ru.eremin.ad.board.route.dto.UpdateAdRequest;
 import ru.eremin.ad.board.route.dto.UpgradeAdRequest;
@@ -33,7 +34,7 @@ public class AdHandler {
             .flatMap(categoryId ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(categoryId)
+                    .bodyValue(AdBoardResponseItem.success(categoryId))
             )
             .transform(ResponseTransformers.errorResponseTransformer());
     }
@@ -41,10 +42,10 @@ public class AdHandler {
     public Mono<ServerResponse> create(final ServerRequest request) {
         return request.bodyToMono(CreateAdRequest.class)
             .flatMap(service::create)
-            .flatMap(response ->
+            .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(response)
+                    .bodyValue(AdBoardResponseItem.success(result))
             )
             .transform(ResponseTransformers.errorResponseTransformer());
     }
@@ -52,10 +53,10 @@ public class AdHandler {
     public Mono<ServerResponse> update(final ServerRequest request) {
         return request.bodyToMono(UpdateAdRequest.class)
             .flatMap(service::updateAd)
-            .flatMap(response ->
+            .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(response)
+                    .bodyValue(AdBoardResponseItem.success(result))
             )
             .transform(ResponseTransformers.errorResponseTransformer());
     }
@@ -63,10 +64,10 @@ public class AdHandler {
     public Mono<ServerResponse> upgrade(final ServerRequest request) {
         return request.bodyToMono(UpgradeAdRequest.class)
             .flatMap(service::upgradeAd)
-            .flatMap(response ->
+            .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(response)
+                    .bodyValue(AdBoardResponseItem.success(result))
             )
             .transform(ResponseTransformers.errorResponseTransformer());
     }
