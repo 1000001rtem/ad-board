@@ -10,8 +10,7 @@ import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.CategoryService;
 import ru.eremin.ad.board.business.service.dto.CategoryDto;
 import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
-
-import java.util.UUID;
+import ru.eremin.ad.board.util.transformer.ResponseTransformers;
 
 @Component
 public class CategoryHandler {
@@ -24,18 +23,25 @@ public class CategoryHandler {
     }
 
     public Mono<ServerResponse> findAll(ServerRequest request) {
-        Flux<CategoryDto> result = service.findAll();
-        return ServerResponse.ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(result, CategoryDto.class);
+        Flux<CategoryDto> resultFlux = service.findAll();
+        return resultFlux
+            .collectList()
+            .flatMap(result ->
+                ServerResponse.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(result)
+            )
+            .transform(ResponseTransformers.errorResponseTransformer());
     }
 
     public Mono<ServerResponse> create(ServerRequest request) {
         return request.bodyToMono(CreateCategoryRequest.class)
-            .map(service::create)
+            .flatMap(service::create)
             .flatMap(response ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(response, UUID.class));
+                    .bodyValue(response)
+            )
+            .transform(ResponseTransformers.errorResponseTransformer());
     }
 }

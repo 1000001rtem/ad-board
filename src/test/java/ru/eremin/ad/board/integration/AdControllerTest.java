@@ -220,4 +220,27 @@ public class AdControllerTest {
             }
         );
     }
+
+    @Test
+    public void should_return_error_if_category_does_not_exist() throws JsonProcessingException {
+        UUID categoryId = UUID.randomUUID();
+        client.post()
+            .uri("/api/v1/ad/create")
+            .contentType(APPLICATION_JSON)
+            .body(BodyInserters.fromValue(
+                mapper.writeValueAsString(new CreateAdRequest(
+                    "test",
+                    "test",
+                    AdType.FREE,
+                    categoryId,
+                    null
+                )))
+            )
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .consumeWith(TestUtils.logConsumer(mapper, log))
+            .jsonPath("$.code").isEqualTo("CATEGORY_DOES_NOT_EXIST")
+            .jsonPath("$.message").isEqualTo("Category with id " + categoryId + " does not exist");
+    }
 }
