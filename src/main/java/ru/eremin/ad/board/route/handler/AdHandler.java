@@ -6,11 +6,12 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.AdService;
-import ru.eremin.ad.board.business.service.dto.AdDto;
+import ru.eremin.ad.board.route.dto.AdBoardResponseItem;
 import ru.eremin.ad.board.route.dto.CreateAdRequest;
 import ru.eremin.ad.board.route.dto.UpdateAdRequest;
 import ru.eremin.ad.board.route.dto.UpgradeAdRequest;
 import ru.eremin.ad.board.util.error.Errors;
+import ru.eremin.ad.board.util.transformer.ResponseTransformers;
 
 import java.util.UUID;
 
@@ -28,41 +29,46 @@ public class AdHandler {
             .map(UUID::fromString)
             .orElseThrow(() -> Errors.BAD_REQUEST.format("category-id").asException())
         )
-            .map(service::findAllActiveByCategory)
-            .flatMap(response ->
+            .flatMapMany(service::findAllActiveByCategory)
+            .collectList()
+            .flatMap(categoryId ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(response, AdDto.class)
-            );
+                    .bodyValue(AdBoardResponseItem.success(categoryId))
+            )
+            .transform(ResponseTransformers.errorResponseTransformer());
     }
 
     public Mono<ServerResponse> create(final ServerRequest request) {
         return request.bodyToMono(CreateAdRequest.class)
-            .map(service::create)
-            .flatMap(response ->
+            .flatMap(service::create)
+            .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(response, UUID.class)
-            );
+                    .bodyValue(AdBoardResponseItem.success(result))
+            )
+            .transform(ResponseTransformers.errorResponseTransformer());
     }
 
     public Mono<ServerResponse> update(final ServerRequest request) {
         return request.bodyToMono(UpdateAdRequest.class)
-            .map(service::updateAd)
-            .flatMap(response ->
+            .flatMap(service::updateAd)
+            .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(response, UUID.class)
-            );
+                    .bodyValue(AdBoardResponseItem.success(result))
+            )
+            .transform(ResponseTransformers.errorResponseTransformer());
     }
 
     public Mono<ServerResponse> upgrade(final ServerRequest request) {
         return request.bodyToMono(UpgradeAdRequest.class)
-            .map(service::upgradeAd)
-            .flatMap(response ->
+            .flatMap(service::upgradeAd)
+            .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(response, UUID.class)
-            );
+                    .bodyValue(AdBoardResponseItem.success(result))
+            )
+            .transform(ResponseTransformers.errorResponseTransformer());
     }
 }

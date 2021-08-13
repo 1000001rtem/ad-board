@@ -57,10 +57,10 @@ public class CategoryService {
      * @param request Запрос на создание новой категории
      * @return {@link Mono} Идентификатор новой категории
      */
-    public Mono<UUID> create(final CreateCategoryRequest request){
+    public Mono<UUID> create(final CreateCategoryRequest request) {
         final String name = request.getCategoryName();
         if (name == null || name.isBlank()) {
-            return Mono.error(new RuntimeException());
+            return Mono.error(BAD_REQUEST.format("name").asException());
         }
         return repository.insert(new Category(name))
             .map(Category::getId)
