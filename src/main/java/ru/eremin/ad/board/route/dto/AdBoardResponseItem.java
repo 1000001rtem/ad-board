@@ -22,6 +22,10 @@ public class AdBoardResponseItem<T> {
         return new AdBoardResponseItem<>(ResponseStatus.SUCCESS, data, null);
     }
 
+    public static <K> AdBoardResponseItem<K> empty() {
+        return new AdBoardResponseItem<>(ResponseStatus.SUCCESS, null, null);
+    }
+
     public static AdBoardResponseItem error(ErrorResponse error) {
         return new AdBoardResponseItem(ResponseStatus.ERROR, null, error);
     }

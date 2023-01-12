@@ -156,6 +156,23 @@ public class AdControllerTest {
     }
 
     @Test
+    void should_return_null_in_formal_response_if_ad_not_found() {
+        client.get()
+            .uri(uriBuilder ->
+                uriBuilder
+                    .path("/api/v1/ad/find-by-id")
+                    .queryParam("id", UUID.randomUUID())
+                    .build()
+            )
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .consumeWith(TestUtils.logConsumer(mapper, log))
+            .jsonPath("$.status").isEqualTo("SUCCESS")
+            .jsonPath("$.data").isEmpty();
+    }
+
+    @Test
     void should_create_ad() throws JsonProcessingException {
         UUID categoryId = categoryRepository.insert(new Category("test")).block().getId();
 

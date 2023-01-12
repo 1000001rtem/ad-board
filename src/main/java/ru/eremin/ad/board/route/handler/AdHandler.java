@@ -50,6 +50,11 @@ public class AdHandler {
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(AdBoardResponseItem.success(result))
             )
+            .switchIfEmpty(
+                ServerResponse.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(AdBoardResponseItem.empty())
+            )
             .transform(ResponseTransformers.errorResponseTransformer());
     }
 
