@@ -15,7 +15,6 @@ import ru.eremin.ad.board.storage.model.Category;
 import ru.eremin.ad.board.storage.model.enumirate.AdType;
 import ru.eremin.ad.board.storage.repository.AdRepository;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -94,7 +93,9 @@ public class AdService {
 
     public Mono<AdDto> findById(final UUID id) {
         return repository.findById(id)
-            .flatMap(ad -> deactivateIfOverdue(ad))
+            .flatMap(ad -> deactivateIfOverdue(ad).flatMap(
+                it -> it.isActive() ? Mono.just(it) : Mono.empty()
+            ))
             .map(AdDto::new)
             .as(transactionalOperator::transactional)
             .subscribeOn(Schedulers.boundedElastic());
@@ -140,7 +141,7 @@ public class AdService {
     public Mono<UUID> updateAd(final UpdateAdRequest request) {
         return Mono.just(request)
             .flatMap(req -> {
-                if (req.getId() == null) Mono.error(BAD_REQUEST.format("id").asException());
+                if (req.getId() == null) return Mono.error(BAD_REQUEST.format("id").asException());
                 return repository.findById(req.getId())
                     .switchIfEmpty(Mono.error(AD_DOES_NOT_EXIST.format(req.getId().toString()).asException()))
                     .flatMap(ad -> {

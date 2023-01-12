@@ -1,17 +1,16 @@
 package ru.eremin.ad.board.route.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Data
+@NoArgsConstructor
 @Accessors(chain = true)
 public class AdBoardResponseItem<T> {
     ResponseStatus status;
     T data;
     ErrorResponse error;
-
-    private AdBoardResponseItem() {
-    }
 
     private AdBoardResponseItem(ResponseStatus status, T data, ErrorResponse error) {
         this.status = status;
@@ -20,7 +19,7 @@ public class AdBoardResponseItem<T> {
     }
 
     public static <K> AdBoardResponseItem<K> success(K data) {
-        return new AdBoardResponseItem<K>(ResponseStatus.SUCCESS, data, null);
+        return new AdBoardResponseItem<>(ResponseStatus.SUCCESS, data, null);
     }
 
     public static AdBoardResponseItem error(ErrorResponse error) {

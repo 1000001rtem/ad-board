@@ -39,7 +39,6 @@ import static ru.eremin.ad.board.util.TestUtils.defaultAd;
 public class AdServiceTest {
     private AdRepository adRepository;
     private CategoryService categoryService;
-    private TransactionalOperator transactionalOperator;
 
     private AdService subj;
 
@@ -47,7 +46,7 @@ public class AdServiceTest {
     public void init() {
         adRepository = mock(AdRepository.class);
         categoryService = mock(CategoryService.class);
-        transactionalOperator = mock(TransactionalOperator.class);
+        TransactionalOperator transactionalOperator = mock(TransactionalOperator.class);
 
         subj = new AdService(adRepository, categoryService, transactionalOperator);
 

@@ -2,7 +2,6 @@ package ru.eremin.ad.board.storage.model;
 
 import lombok.Data;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**

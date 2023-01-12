@@ -8,7 +8,6 @@ import org.springframework.lang.NonNull;
 import ru.eremin.ad.board.storage.model.Ad;
 import ru.eremin.ad.board.storage.model.enumirate.AdType;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 

@@ -15,10 +15,10 @@ import java.util.UUID;
 
 @Data
 @Table("ads")
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 public class Ad extends AbstractTable {
 
     @Id

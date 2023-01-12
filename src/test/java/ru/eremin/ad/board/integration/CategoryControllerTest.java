@@ -81,14 +81,13 @@ public class CategoryControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$.data").value((String value) -> {
+            .jsonPath("$.data").value((String value) ->
                 StepVerifier.create(repository.findAll())
                     .expectNextMatches(next -> {
                         assertEquals(UUID.fromString(value), next.getId());
                         return true;
                     })
-                    .verifyComplete();
-            }
-        );
+                    .verifyComplete()
+            );
     }
 }

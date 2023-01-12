@@ -68,7 +68,7 @@ public class AdControllerTest {
     }
 
     @Test
-    void should_find_ad_by_category() throws JsonProcessingException {
+    void should_find_ad_by_category() {
         UUID categoryId = categoryRepository.insert(new Category("test")).block().getId();
 
         List.of(
@@ -97,7 +97,7 @@ public class AdControllerTest {
     }
 
     @Test
-    void should_filter_and_deactivate_overdue_ads() throws JsonProcessingException {
+    void should_filter_and_deactivate_overdue_ads() {
         UUID categoryId = categoryRepository.insert(new Category("test")).block().getId();
 
         List.of(
@@ -132,28 +132,28 @@ public class AdControllerTest {
             .collect(Collectors.toList());
 
         assertEquals(2, result.size());
-        assertTrue(result.stream().map(it -> it.getText()).collect(Collectors.toList()).containsAll(List.of("noop", "noop")));
+        assertTrue(result.stream().map(Ad::getText).collect(Collectors.toList()).containsAll(List.of("noop", "noop")));
     }
 
-   @Test
-   void should_find_by_id(){
+    @Test
+    void should_find_by_id() {
         var id = UUID.randomUUID();
 
         adRepository.insert(TestUtils.defaultAd().setId(id)).block();
 
-       client.get()
-           .uri(uriBuilder ->
-               uriBuilder
-                   .path("/api/v1/ad/find-by-id")
-                   .queryParam("id", id.toString())
-                   .build()
-           )
-           .exchange()
-           .expectStatus().isOk()
-           .expectBody()
-           .consumeWith(TestUtils.logConsumer(mapper, log))
-           .jsonPath("$.data.id").isEqualTo(id.toString());
-   }
+        client.get()
+            .uri(uriBuilder ->
+                uriBuilder
+                    .path("/api/v1/ad/find-by-id")
+                    .queryParam("id", id.toString())
+                    .build()
+            )
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .consumeWith(TestUtils.logConsumer(mapper, log))
+            .jsonPath("$.data.id").isEqualTo(id.toString());
+    }
 
     @Test
     void should_create_ad() throws JsonProcessingException {
@@ -175,15 +175,14 @@ public class AdControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$.data").value((String value) -> {
+            .jsonPath("$.data").value((String value) ->
                 StepVerifier.create(adRepository.findAll())
                     .expectNextMatches(next -> {
                         assertEquals(UUID.fromString(value), next.getId());
                         return true;
                     })
-                    .verifyComplete();
-            }
-        );
+                    .verifyComplete()
+            );
     }
 
     @Test
@@ -200,16 +199,15 @@ public class AdControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$.data").value((String value) -> {
+            .jsonPath("$.data").value((String value) ->
                 StepVerifier.create(adRepository.findById(UUID.fromString(value)))
                     .expectNextMatches(next -> {
                         assertEquals(UUID.fromString(value), next.getId());
                         assertEquals("new text", next.getText());
                         return true;
                     })
-                    .verifyComplete();
-            }
-        );
+                    .verifyComplete()
+            );
     }
 
     @Test
@@ -226,7 +224,7 @@ public class AdControllerTest {
             .expectStatus().isOk()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$.data").value((String value) -> {
+            .jsonPath("$.data").value((String value) ->
                 StepVerifier.create(adRepository.findById(UUID.fromString(value)))
                     .expectNextMatches(next -> {
                         assertEquals(UUID.fromString(value), next.getId());
@@ -237,9 +235,8 @@ public class AdControllerTest {
                         );
                         return true;
                     })
-                    .verifyComplete();
-            }
-        );
+                    .verifyComplete()
+            );
     }
 
     @Test
