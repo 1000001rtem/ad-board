@@ -3,6 +3,7 @@ package ru.eremin.ad.board.storage.model;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Базовый набор полей для таблиц.
@@ -12,9 +13,10 @@ abstract public class AbstractTable {
 
     private String createUser;
 
-    private Instant createTime;
+    private LocalDateTime createTime;
 
     private String lastModifiedUser;
 
-    private Instant lastModifiedTime;
+    private LocalDateTime lastModifiedTime;
 }
+

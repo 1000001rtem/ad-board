@@ -20,6 +20,7 @@ import ru.eremin.ad.board.util.error.AdBoardException;
 import ru.eremin.ad.board.util.error.Errors;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
@@ -75,10 +76,10 @@ public class AdServiceTest {
         List<Ad> ads = List.of(
             defaultAd(),
             defaultAd(),
-            defaultAd().setType(AdType.PAID).setEndDate(Instant.now().plus(42, ChronoUnit.DAYS)),
-            defaultAd().setType(AdType.PAID).setEndDate(Instant.now().plus(1, ChronoUnit.MINUTES)),
-            defaultAd().setText("noop").setType(AdType.PAID).setEndDate(Instant.now().minus(1, ChronoUnit.DAYS)), // должен деактивировать
-            defaultAd().setText("noop").setType(AdType.PAID).setEndDate(Instant.now().minus(1, ChronoUnit.MINUTES)) // должен деактивировать
+            defaultAd().setType(AdType.PAID).setEndDate(LocalDateTime.now().plus(42, ChronoUnit.DAYS)),
+            defaultAd().setType(AdType.PAID).setEndDate(LocalDateTime.now().plus(1, ChronoUnit.MINUTES)),
+            defaultAd().setText("noop").setType(AdType.PAID).setEndDate(LocalDateTime.now().minus(1, ChronoUnit.DAYS)), // должен деактивировать
+            defaultAd().setText("noop").setType(AdType.PAID).setEndDate(LocalDateTime.now().minus(1, ChronoUnit.MINUTES)) // должен деактивировать
         );
 
         when(adRepository.findAll()).thenReturn(Flux.fromIterable(ads));
@@ -96,10 +97,10 @@ public class AdServiceTest {
         List<Ad> ads = List.of(
             defaultAd(),
             defaultAd(),
-            defaultAd().setType(AdType.PAID).setEndDate(Instant.now().plus(42, ChronoUnit.DAYS)),
-            defaultAd().setType(AdType.PAID).setEndDate(Instant.now().plus(1, ChronoUnit.MINUTES)),
-            defaultAd().setText("noop").setType(AdType.PAID).setEndDate(Instant.now().minus(1, ChronoUnit.DAYS)), // должен отфильтроваться
-            defaultAd().setText("noop").setType(AdType.PAID).setEndDate(Instant.now().minus(1, ChronoUnit.MINUTES)) // должен отфильтроваться
+            defaultAd().setType(AdType.PAID).setEndDate(LocalDateTime.now().plus(42, ChronoUnit.DAYS)),
+            defaultAd().setType(AdType.PAID).setEndDate(LocalDateTime.now().plus(1, ChronoUnit.MINUTES)),
+            defaultAd().setText("noop").setType(AdType.PAID).setEndDate(LocalDateTime.now().minus(1, ChronoUnit.DAYS)), // должен отфильтроваться
+            defaultAd().setText("noop").setType(AdType.PAID).setEndDate(LocalDateTime.now().minus(1, ChronoUnit.MINUTES)) // должен отфильтроваться
         );
 
         when(adRepository.findAllActive()).thenReturn(Flux.fromIterable(ads));
@@ -258,7 +259,7 @@ public class AdServiceTest {
         assertEquals(ad.getId(), captor.getValue().getId());
         assertEquals(ad.getType(), AdType.PAID);
         assertEquals(
-            Instant.now().truncatedTo(ChronoUnit.DAYS),
+            LocalDateTime.now().truncatedTo(ChronoUnit.DAYS),
             captor.getValue().getEndDate().minus(5, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS)
         );
     }

@@ -23,11 +23,11 @@
             <column name="active" type="boolean" remarks="Признак активности объявления" defaultValue="true">
                 <constraints nullable="false"/>
             </column>
-            <column name="start_date" type="bigint" remarks="Unix-время начала объявления"
+            <column name="start_date" type="TIMESTAMP" remarks="Unix-время начала объявления"
                     defaultValueComputed="${now}">
                 <constraints nullable="true"/>
             </column>
-            <column name="end_date" type="bigint" remarks="Unix-время окончания объявления">
+            <column name="end_date" type="TIMESTAMP" remarks="Unix-время окончания объявления">
                 <constraints nullable="true"/>
             </column>
 
@@ -35,7 +35,7 @@
                     remarks="Идентификатор пользователя/клиента, который добавлял запись">
                 <constraints nullable="false"/>
             </column>
-            <column name="create_time" type="bigint" defaultValueComputed="${now}"
+            <column name="create_time" type="TIMESTAMP" defaultValueComputed="${now}"
                     remarks="Unix-время добавления записи в таблицу">
                 <constraints nullable="false"/>
             </column>
@@ -43,7 +43,7 @@
                     remarks="Идентификатор пользователя/клиента, который редактировал(включая добваление) запись">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_time" type="bigint" defaultValueComputed="${now}"
+            <column name="last_modified_time" type="TIMESTAMP" defaultValueComputed="${now}"
                     remarks="Unix-время последней модификации записи">
                 <constraints nullable="false"/>
             </column>

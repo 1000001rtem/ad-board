@@ -9,6 +9,7 @@ import ru.eremin.ad.board.storage.model.enumirate.AdType;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -38,6 +39,6 @@ public class TestUtils {
             .setText("test text")
             .setType(AdType.FREE)
             .setCategoryId(UUID.randomUUID())
-            .setStartDate(Instant.now());
+            .setStartDate(LocalDateTime.now());
     }
 }

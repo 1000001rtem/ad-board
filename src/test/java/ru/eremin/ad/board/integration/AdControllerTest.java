@@ -26,7 +26,7 @@ import ru.eremin.ad.board.storage.repository.AdRepository;
 import ru.eremin.ad.board.storage.repository.CategoryRepository;
 import ru.eremin.ad.board.util.TestUtils;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
@@ -102,10 +102,10 @@ public class AdControllerTest {
             TestUtils.defaultAd().setCategoryId(categoryId),
             TestUtils.defaultAd().setCategoryId(categoryId),
             TestUtils.defaultAd().setCategoryId(categoryId),
-            TestUtils.defaultAd().setCategoryId(categoryId).setType(AdType.PAID).setEndDate(Instant.now().plus(42, ChronoUnit.DAYS)),
-            TestUtils.defaultAd().setCategoryId(categoryId).setType(AdType.PAID).setEndDate(Instant.now().plus(1, ChronoUnit.MINUTES)),
-            TestUtils.defaultAd().setCategoryId(categoryId).setText("noop").setType(AdType.PAID).setEndDate(Instant.now().minus(1, ChronoUnit.DAYS)), // должен отфильтроваться
-            TestUtils.defaultAd().setCategoryId(categoryId).setText("noop").setType(AdType.PAID).setEndDate(Instant.now().minus(1, ChronoUnit.MINUTES)), // должен отфильтроваться
+            TestUtils.defaultAd().setCategoryId(categoryId).setType(AdType.PAID).setEndDate(LocalDateTime.now().plus(42, ChronoUnit.DAYS)),
+            TestUtils.defaultAd().setCategoryId(categoryId).setType(AdType.PAID).setEndDate(LocalDateTime.now().plus(1, ChronoUnit.MINUTES)),
+            TestUtils.defaultAd().setCategoryId(categoryId).setText("noop").setType(AdType.PAID).setEndDate(LocalDateTime.now().minus(1, ChronoUnit.DAYS)), // должен отфильтроваться
+            TestUtils.defaultAd().setCategoryId(categoryId).setText("noop").setType(AdType.PAID).setEndDate(LocalDateTime.now().minus(1, ChronoUnit.MINUTES)), // должен отфильтроваться
             TestUtils.defaultAd(),
             TestUtils.defaultAd(),
             TestUtils.defaultAd()
@@ -211,7 +211,7 @@ public class AdControllerTest {
                         assertEquals(UUID.fromString(value), next.getId());
                         assertEquals(AdType.PAID, next.getType());
                         assertEquals(
-                            Instant.now().truncatedTo(ChronoUnit.DAYS),
+                            LocalDateTime.now().truncatedTo(ChronoUnit.DAYS),
                             next.getEndDate().minus(5, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS)
                         );
                         return true;

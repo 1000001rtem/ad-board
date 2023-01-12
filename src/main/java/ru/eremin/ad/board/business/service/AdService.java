@@ -16,6 +16,7 @@ import ru.eremin.ad.board.storage.model.enumirate.AdType;
 import ru.eremin.ad.board.storage.repository.AdRepository;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -103,7 +104,9 @@ public class AdService {
         return validateCreateRequest(request)
             .then(checkCategoryExist(request.getCategoryId()))
             .flatMap(categoryId -> {
-                final Instant endDate = AdType.PAID.equals(request.getType()) ? Instant.now().plus(request.getDuration(), ChronoUnit.DAYS) : null;
+                final LocalDateTime endDate = AdType.PAID.equals(request.getType())
+                    ? LocalDateTime.now().plus(request.getDuration(), ChronoUnit.DAYS)
+                    : null;
                 return repository.insert(
                     new Ad()
                         .setTheme(request.getTheme())
@@ -169,7 +172,7 @@ public class AdService {
                     .flatMap(ad -> {
                         ad
                             .setType(AdType.PAID)
-                            .setEndDate(Instant.now().plus(req.getDuration(), ChronoUnit.DAYS));
+                            .setEndDate(LocalDateTime.now().plus(req.getDuration(), ChronoUnit.DAYS));
                         return repository.updateAd(ad);
                     });
             })
@@ -181,7 +184,7 @@ public class AdService {
     private Mono<Ad> deactivateIfOverdue(final Ad ad) {
         return Mono.just(ad)
             .flatMap(it -> {
-                if (AdType.PAID.equals(ad.getType()) && ad.getEndDate().isBefore(Instant.now())) {
+                if (AdType.PAID.equals(ad.getType()) && ad.getEndDate().isBefore(LocalDateTime.now())) {
                     return repository.deactivate(it.getId())
                         .map(number -> it.setActive(false));
                 }

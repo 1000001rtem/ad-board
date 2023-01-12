@@ -11,7 +11,7 @@ import ru.eremin.ad.board.storage.model.AbstractTable;
 import ru.eremin.ad.board.storage.model.Ad;
 import ru.eremin.ad.board.storage.model.Category;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Component
 class AdBeforeConvertCallback implements BeforeConvertCallback<Ad> {
@@ -47,9 +47,9 @@ class Utils {
     static <T extends AbstractTable> T fill(String userName, T entity) {
         if (entity.getCreateUser() == null) {
             entity.setCreateUser(userName);
-            entity.setCreateTime(Instant.now());
+            entity.setCreateTime(LocalDateTime.now());
         }
-        entity.setLastModifiedTime(Instant.now());
+        entity.setLastModifiedTime(LocalDateTime.now());
         entity.setLastModifiedUser(userName);
 
         return entity;

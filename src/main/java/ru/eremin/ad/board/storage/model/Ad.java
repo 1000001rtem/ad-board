@@ -10,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import ru.eremin.ad.board.storage.model.enumirate.AdType;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -41,8 +41,8 @@ public class Ad extends AbstractTable {
     private boolean active = true;
 
     @Column("start_date")
-    private Instant startDate = Instant.now();
+    private LocalDateTime startDate = LocalDateTime.now();
 
     @Column("end_date")
-    private Instant endDate;
+    private LocalDateTime endDate;
 }

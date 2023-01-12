@@ -9,6 +9,7 @@ import ru.eremin.ad.board.storage.model.Ad;
 import ru.eremin.ad.board.storage.model.enumirate.AdType;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -22,8 +23,8 @@ public class AdDto {
     private AdType type;
     private UUID categoryId;
     private boolean active;
-    private Instant startDate;
-    private Instant endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     public AdDto(@NonNull Ad ad) {
         this.id = ad.getId();
