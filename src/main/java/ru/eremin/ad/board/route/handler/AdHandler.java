@@ -26,9 +26,9 @@ public class AdHandler {
 
     public Mono<ServerResponse> findByCategory(ServerRequest request) {
         return Mono.just(request.queryParam("category-id")
-            .map(UUID::fromString)
-            .orElseThrow(() -> Errors.BAD_REQUEST.format("category-id").asException())
-        )
+                .map(UUID::fromString)
+                .orElseThrow(() -> Errors.BAD_REQUEST.format("category-id").asException())
+            )
             .flatMapMany(service::findAllActiveByCategory)
             .collectList()
             .flatMap(categoryId ->

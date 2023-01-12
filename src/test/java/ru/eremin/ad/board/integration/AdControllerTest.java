@@ -169,7 +169,7 @@ public class AdControllerTest {
     void should_update_ad() throws JsonProcessingException {
         Ad ad = adRepository.insert(TestUtils.defaultAd()).block();
 
-        client.post()
+        client.put()
             .uri("/api/v1/ad/update")
             .contentType(APPLICATION_JSON)
             .body(BodyInserters.fromValue(
@@ -195,7 +195,7 @@ public class AdControllerTest {
     void should_upgrade_ad() throws JsonProcessingException {
         Ad ad = adRepository.insert(TestUtils.defaultAd()).block();
 
-        client.post()
+        client.put()
             .uri("/api/v1/ad/upgrade")
             .contentType(APPLICATION_JSON)
             .body(BodyInserters.fromValue(

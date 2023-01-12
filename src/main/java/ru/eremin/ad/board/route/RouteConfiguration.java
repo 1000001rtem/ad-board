@@ -31,8 +31,8 @@ public class RouteConfiguration {
                 builder
                     .GET("/find-by-category", accept(MediaType.APPLICATION_JSON), handler::findByCategory)
                     .POST("/create", accept(MediaType.APPLICATION_JSON), handler::create)
-                    .POST("/update", accept(MediaType.APPLICATION_JSON), handler::update)
-                    .POST("/upgrade", accept(MediaType.APPLICATION_JSON), handler::upgrade))
+                    .PUT("/update", accept(MediaType.APPLICATION_JSON), handler::update)
+                    .PUT("/upgrade", accept(MediaType.APPLICATION_JSON), handler::upgrade))
             .build();
     }
 }
