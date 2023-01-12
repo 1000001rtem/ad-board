@@ -7,8 +7,10 @@ import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-import ru.eremin.ad.board.business.service.AdService;
-import ru.eremin.ad.board.business.service.CategoryService;
+import ru.eremin.ad.board.business.service.AdServiceImpl;
+import ru.eremin.ad.board.business.service.CategoryServiceImpl;
+import ru.eremin.ad.board.business.service.api.AdService;
+import ru.eremin.ad.board.business.service.api.CategoryService;
 import ru.eremin.ad.board.business.service.dto.AdDto;
 import ru.eremin.ad.board.route.dto.CreateAdRequest;
 import ru.eremin.ad.board.route.dto.UpdateAdRequest;
@@ -45,10 +47,10 @@ public class AdServiceTest {
     @BeforeEach
     public void init() {
         adRepository = mock(AdRepository.class);
-        categoryService = mock(CategoryService.class);
+        categoryService = mock(CategoryServiceImpl.class);
         TransactionalOperator transactionalOperator = mock(TransactionalOperator.class);
 
-        subj = new AdService(adRepository, categoryService, transactionalOperator);
+        subj = new AdServiceImpl(adRepository, categoryService, transactionalOperator);
 
         when(transactionalOperator.transactional(any(Flux.class))).thenAnswer(it ->
             it.getArguments()[0]

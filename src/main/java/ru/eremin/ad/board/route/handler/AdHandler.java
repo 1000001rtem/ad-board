@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-import ru.eremin.ad.board.business.service.AdService;
+import ru.eremin.ad.board.business.service.api.AdService;
 import ru.eremin.ad.board.route.dto.AdBoardResponseItem;
 import ru.eremin.ad.board.route.dto.CreateAdRequest;
 import ru.eremin.ad.board.route.dto.UpdateAdRequest;
