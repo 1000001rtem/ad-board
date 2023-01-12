@@ -1,6 +1,7 @@
 package ru.eremin.ad.board.event;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import static ru.eremin.ad.board.storage.model.enumirate.AdType.FREE;
 import static ru.eremin.ad.board.storage.model.enumirate.AdType.PAID;
 
+@Log4j2
 @Component
 @Profile("local")
 @RequiredArgsConstructor
@@ -33,7 +35,12 @@ public class Bootstrap {
         List.of(
             new Category().setId(vehicleCategory).setCategoryName("Транспортные средства"),
             new Category().setId(foodCategory).setCategoryName("Продукты питания")
-        ).forEach(it -> categoryRepository.insert(it).block());
+        ).forEach(it -> {
+            categoryRepository
+                .insert(it)
+                .doOnSuccess(category -> log.info(category.getCategoryName() + " - " + category.getId()))
+                .subscribe();
+        });
 
         List.of(
             new Ad()
@@ -58,6 +65,11 @@ public class Bootstrap {
                 .setCategoryId(foodCategory)
                 .setType(FREE)
                 .setActive(false)
-        ).forEach(it -> adRepository.insert(it).block());
+        ).forEach(it -> {
+            adRepository
+                .insert(it)
+                .doOnSuccess(ad -> log.info(ad.getTheme() + " - " + ad.getId()))
+                .block();
+        });
     }
 }
