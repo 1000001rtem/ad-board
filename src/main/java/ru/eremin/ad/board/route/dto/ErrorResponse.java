@@ -13,6 +13,16 @@ import java.time.Instant;
 @Accessors(chain = true)
 public class ErrorResponse {
     private Instant timestamp = Instant.now();
+    /**
+     * Error code
+     */
     private String code;
+    /**
+     * Technical message
+     */
     private String message;
+    /**
+     * Message for user
+     */
+    private String displayMessage;
 }

@@ -276,6 +276,7 @@ public class AdControllerTest {
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
             .jsonPath("$.error.code").isEqualTo("CATEGORY_DOES_NOT_EXIST")
-            .jsonPath("$.error.message").isEqualTo("Category with id " + categoryId + " does not exist");
+            .jsonPath("$.error.message").isEqualTo("Category with id " + categoryId + " does not exist")
+            .jsonPath("$.error.displayMessage").isEqualTo("Something went wrong");
     }
 }

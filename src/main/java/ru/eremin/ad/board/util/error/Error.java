@@ -11,6 +11,8 @@ public interface Error {
 
     String getMessage();
 
+    String getDisplayMessage();
+
     /**
      * Превращает ошибку в exception
      *
@@ -24,7 +26,7 @@ public interface Error {
      * Форматирует сообщение об ошибке
      */
     default Error format(String... values) {
-        return new FormattedError(getCode(), String.format(getMessage(), values));
+        return new FormattedError(getCode(), String.format(getMessage(), values), getDisplayMessage());
     }
 }
 
@@ -33,4 +35,5 @@ public interface Error {
 class FormattedError implements Error {
     private final String code;
     private final String message;
+    private final String displayMessage;
 }

@@ -26,7 +26,8 @@ public class ResponseTransformers {
                     final AdBoardException error = (AdBoardException) err;
                     final ErrorResponse errorResponse = new ErrorResponse()
                         .setCode(error.getCode())
-                        .setMessage(error.getMessage());
+                        .setMessage(error.getMessage())
+                        .setDisplayMessage(error.getDisplayMessage());
                     return ServerResponse.status(HttpStatus.OK)
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(AdBoardResponseItem.error(errorResponse));
