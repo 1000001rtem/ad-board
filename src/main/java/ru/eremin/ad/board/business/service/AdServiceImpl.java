@@ -42,83 +42,142 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Flux<AdDto> findAll() {
-        return repository.findAll().flatMap(this::deactivateIfOverdue).map(AdDto::new).as(transactionalOperator::transactional).subscribeOn(Schedulers.boundedElastic());
+        return repository.findAll()
+            .flatMap(this::deactivateIfOverdue)
+            .map(AdDto::new)
+            .as(transactionalOperator::transactional)
+            .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
     public Flux<AdDto> findAllActive() {
-        return repository.findAllActive().filterWhen(ad -> deactivateIfOverdue(ad).map(Ad::isActive)).map(AdDto::new).as(transactionalOperator::transactional).subscribeOn(Schedulers.boundedElastic());
+        return repository.findAllActive()
+            .filterWhen(ad -> deactivateIfOverdue(ad).map(Ad::isActive))
+            .map(AdDto::new)
+            .as(transactionalOperator::transactional)
+            .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
     public Flux<AdDto> findAllActiveByCategory(final UUID categoryId) {
-        return repository.findByCategoryId(categoryId).filterWhen(ad -> deactivateIfOverdue(ad).map(Ad::isActive)).map(AdDto::new).as(transactionalOperator::transactional).subscribeOn(Schedulers.boundedElastic());
+        return repository.findByCategoryId(categoryId)
+            .filterWhen(ad -> deactivateIfOverdue(ad).map(Ad::isActive))
+            .map(AdDto::new)
+            .as(transactionalOperator::transactional)
+            .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
     public Mono<AdDto> findById(final UUID id) {
-        return repository.findById(id).flatMap(ad -> deactivateIfOverdue(ad).flatMap(it -> it.isActive() ? Mono.just(it) : Mono.empty())).map(AdDto::new).as(transactionalOperator::transactional).subscribeOn(Schedulers.boundedElastic());
+        return repository.findById(id)
+            .flatMap(ad -> deactivateIfOverdue(ad).flatMap(
+                it -> it.isActive() ? Mono.just(it) : Mono.empty()
+            ))
+            .map(AdDto::new)
+            .as(transactionalOperator::transactional)
+            .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
     public Mono<UUID> create(final CreateAdRequest request) {
-        return validateCreateRequest(request).then(checkCategoryExist(request.getCategoryId())).flatMap(categoryId -> {
-            final LocalDateTime endDate = AdType.PAID.equals(request.getType()) ? LocalDateTime.now().plus(request.getDuration(), ChronoUnit.DAYS) : null;
-            return repository.insert(new Ad().setTheme(request.getTheme()).setText(request.getText()).setType(request.getType()).setCategoryId(categoryId).setEndDate(endDate));
-        }).map(Ad::getId).as(transactionalOperator::transactional).subscribeOn(Schedulers.boundedElastic());
+        return validateCreateRequest(request)
+            .then(checkCategoryExist(request.getCategoryId()))
+            .flatMap(categoryId -> {
+                final LocalDateTime endDate = AdType.PAID.equals(request.getType())
+                    ? LocalDateTime.now().plus(request.getDuration(), ChronoUnit.DAYS)
+                    : null;
+                return repository.insert(
+                    new Ad()
+                        .setTheme(request.getTheme())
+                        .setText(request.getText())
+                        .setType(request.getType())
+                        .setCategoryId(categoryId)
+                        .setEndDate(endDate)
+                );
+            })
+            .map(Ad::getId)
+            .as(transactionalOperator::transactional)
+            .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
     public Mono<UUID> updateAd(final UpdateAdRequest request) {
-        return Mono.just(request).flatMap(req -> {
-            if (req.getId() == null) return Mono.error(BAD_REQUEST.format("id").asException());
-            return repository.findById(req.getId()).switchIfEmpty(Mono.error(AD_DOES_NOT_EXIST.format(req.getId().toString()).asException())).flatMap(ad -> {
-                if (req.getNewCategoryId() != null) {
-                    return checkCategoryExist(req.getNewCategoryId()).map(ad::setCategoryId);
-                }
-                return Mono.just(ad);
-            }).flatMap(ad -> {
-                ad.setText(req.getNewText() != null ? req.getNewText() : ad.getText()).setTheme(req.getNewTheme() != null ? req.getNewTheme() : ad.getTheme());
-                return repository.updateAd(ad);
-            });
-        }).map(Ad::getId).as(transactionalOperator::transactional).subscribeOn(Schedulers.boundedElastic());
+        return Mono.just(request)
+            .flatMap(req -> {
+                if (req.getId() == null) return Mono.error(BAD_REQUEST.format("id").asException());
+                return repository.findById(req.getId())
+                    .switchIfEmpty(Mono.error(AD_DOES_NOT_EXIST.format(req.getId().toString()).asException()))
+                    .flatMap(ad -> {
+                        if (req.getNewCategoryId() != null) {
+                            return checkCategoryExist(req.getNewCategoryId())
+                                .map(ad::setCategoryId);
+                        }
+                        return Mono.just(ad);
+                    })
+                    .flatMap(ad -> {
+                        ad
+                            .setText(req.getNewText() != null ? req.getNewText() : ad.getText())
+                            .setTheme(req.getNewTheme() != null ? req.getNewTheme() : ad.getTheme());
+                        return repository.updateAd(ad);
+                    });
+            })
+            .map(Ad::getId)
+            .as(transactionalOperator::transactional)
+            .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
     public Mono<UUID> upgradeAd(final UpgradeAdRequest request) {
-        return Mono.just(request).flatMap(req -> {
-            if (req.getId() == null) return Mono.error(BAD_REQUEST.format("id").asException());
-            if (req.getDuration() == null) return Mono.error(BAD_REQUEST.format("duration").asException());
-            return repository.findById(req.getId()).switchIfEmpty(Mono.error(AD_DOES_NOT_EXIST.format(req.getId().toString()).asException())).flatMap(ad -> {
-                ad.setType(AdType.PAID).setEndDate(LocalDateTime.now().plus(req.getDuration(), ChronoUnit.DAYS));
-                return repository.updateAd(ad);
-            });
-        }).map(Ad::getId).as(transactionalOperator::transactional).subscribeOn(Schedulers.boundedElastic());
+        return Mono.just(request)
+            .flatMap(req -> {
+                if (req.getId() == null) return Mono.error(BAD_REQUEST.format("id").asException());
+                if (req.getDuration() == null) return Mono.error(BAD_REQUEST.format("duration").asException());
+                return repository.findById(req.getId())
+                    .switchIfEmpty(Mono.error(AD_DOES_NOT_EXIST.format(req.getId().toString()).asException()))
+                    .flatMap(ad -> {
+                        ad
+                            .setType(AdType.PAID)
+                            .setEndDate(LocalDateTime.now().plus(req.getDuration(), ChronoUnit.DAYS));
+                        return repository.updateAd(ad);
+                    });
+            })
+            .map(Ad::getId)
+            .as(transactionalOperator::transactional)
+            .subscribeOn(Schedulers.boundedElastic());
     }
 
     private Mono<Ad> deactivateIfOverdue(final Ad ad) {
-        return Mono.just(ad).flatMap(it -> {
-            if (AdType.PAID.equals(ad.getType()) && ad.getEndDate().isBefore(LocalDateTime.now())) {
-                return repository.deactivate(it.getId()).map(number -> it.setActive(false));
-            }
-            return Mono.just(it);
-        });
+        return Mono.just(ad)
+            .flatMap(it -> {
+                if (AdType.PAID.equals(ad.getType()) && ad.getEndDate().isBefore(LocalDateTime.now())) {
+                    return repository.deactivate(it.getId())
+                        .map(number -> it.setActive(false));
+                }
+                return Mono.just(it);
+            });
     }
 
     private Mono<Void> validateCreateRequest(final CreateAdRequest request) {
-        return Mono.just(request).flatMap(req -> {
-            if (req.getCategoryId() == null || req.getText() == null || req.getTheme() == null || req.getType() == null) {
-                return Mono.error(BAD_REQUEST.format("request").asException());
-            }
-            // If the ad is paid, then there must be a duration.
-            if (AdType.PAID.equals(req.getType()) && req.getDuration() == null) {
-                return Mono.error(EMPTY_DURATION.asException());
-            }
-            return Mono.empty();
-        });
+        return Mono.just(request)
+            .flatMap(req -> {
+                if (req.getCategoryId() == null
+                    || req.getText() == null
+                    || req.getTheme() == null
+                    || req.getType() == null
+                ) {
+                    return Mono.error(BAD_REQUEST.format("request").asException());
+                }
+                // If the ad is paid, it must be with duration.
+                if (AdType.PAID.equals(req.getType()) && req.getDuration() == null) {
+                    return Mono.error(EMPTY_DURATION.asException());
+                }
+                return Mono.empty();
+            });
     }
 
     private Mono<UUID> checkCategoryExist(final UUID categoryId) {
-        return categoryService.findById(categoryId).switchIfEmpty(Mono.error(CATEGORY_DOES_NOT_EXIST.format(categoryId.toString()).asException())).map(Category::getId);
+        return categoryService.findById(categoryId)
+            .switchIfEmpty(Mono.error(CATEGORY_DOES_NOT_EXIST.format(categoryId.toString()).asException()))
+            .map(Category::getId);
     }
 }
