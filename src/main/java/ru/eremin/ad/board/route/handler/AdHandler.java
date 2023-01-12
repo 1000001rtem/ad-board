@@ -39,6 +39,20 @@ public class AdHandler {
             .transform(ResponseTransformers.errorResponseTransformer());
     }
 
+    public Mono<ServerResponse> findById(ServerRequest request) {
+        return Mono.just(request.queryParam("id")
+                .map(UUID::fromString)
+                .orElseThrow(() -> Errors.BAD_REQUEST.format("id").asException())
+            )
+            .flatMap(service::findById)
+            .flatMap(result ->
+                ServerResponse.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(AdBoardResponseItem.success(result))
+            )
+            .transform(ResponseTransformers.errorResponseTransformer());
+    }
+
     public Mono<ServerResponse> create(final ServerRequest request) {
         return request.bodyToMono(CreateAdRequest.class)
             .flatMap(service::create)

@@ -92,6 +92,14 @@ public class AdService {
             .subscribeOn(Schedulers.boundedElastic());
     }
 
+    public Mono<AdDto> findById(final UUID id) {
+        return repository.findById(id)
+            .flatMap(ad -> deactivateIfOverdue(ad))
+            .map(AdDto::new)
+            .as(transactionalOperator::transactional)
+            .subscribeOn(Schedulers.boundedElastic());
+    }
+
     /**
      * Создание нового объявления.
      * Если в запросе указана несуществующая группа, будет возвращён {@link reactor.core.publisher.MonoError}.
@@ -165,8 +173,8 @@ public class AdService {
     public Mono<UUID> upgradeAd(final UpgradeAdRequest request) {
         return Mono.just(request)
             .flatMap(req -> {
-                if (req.getId() == null) Mono.error(BAD_REQUEST.format("id").asException());
-                if (req.getDuration() == null) Mono.error(BAD_REQUEST.format("duration").asException());
+                if (req.getId() == null) return Mono.error(BAD_REQUEST.format("id").asException());
+                if (req.getDuration() == null) return Mono.error(BAD_REQUEST.format("duration").asException());
                 return repository.findById(req.getId())
                     .switchIfEmpty(Mono.error(AD_DOES_NOT_EXIST.format(req.getId().toString()).asException()))
                     .flatMap(ad -> {

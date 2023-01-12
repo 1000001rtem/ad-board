@@ -30,6 +30,7 @@ public class RouteConfiguration {
             .path("/api/v1/ad", builder ->
                 builder
                     .GET("/find-by-category", accept(MediaType.APPLICATION_JSON), handler::findByCategory)
+                    .GET("/find-by-id", accept(MediaType.APPLICATION_JSON), handler::findById)
                     .POST("/create", accept(MediaType.APPLICATION_JSON), handler::create)
                     .PUT("/update", accept(MediaType.APPLICATION_JSON), handler::update)
                     .PUT("/upgrade", accept(MediaType.APPLICATION_JSON), handler::upgrade))

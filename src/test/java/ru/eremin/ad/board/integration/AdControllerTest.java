@@ -133,8 +133,27 @@ public class AdControllerTest {
 
         assertEquals(2, result.size());
         assertTrue(result.stream().map(it -> it.getText()).collect(Collectors.toList()).containsAll(List.of("noop", "noop")));
-
     }
+
+   @Test
+   void should_find_by_id(){
+        var id = UUID.randomUUID();
+
+        adRepository.insert(TestUtils.defaultAd().setId(id)).block();
+
+       client.get()
+           .uri(uriBuilder ->
+               uriBuilder
+                   .path("/api/v1/ad/find-by-id")
+                   .queryParam("id", id.toString())
+                   .build()
+           )
+           .exchange()
+           .expectStatus().isOk()
+           .expectBody()
+           .consumeWith(TestUtils.logConsumer(mapper, log))
+           .jsonPath("$.data.id").isEqualTo(id.toString());
+   }
 
     @Test
     void should_create_ad() throws JsonProcessingException {

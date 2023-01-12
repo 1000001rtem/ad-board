@@ -19,14 +19,13 @@ import ru.eremin.ad.board.storage.repository.AdRepository;
 import ru.eremin.ad.board.util.error.AdBoardException;
 import ru.eremin.ad.board.util.error.Errors;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
@@ -106,6 +105,7 @@ public class AdServiceTest {
         when(adRepository.findAllActive()).thenReturn(Flux.fromIterable(ads));
         when(adRepository.findByCategoryId(any())).thenReturn(Flux.fromIterable(ads));
         when(adRepository.deactivate(any())).thenReturn(Mono.just(1));
+        when(adRepository.findById(any())).thenReturn(Mono.just(ads.get(4)));
 
         List<AdDto> result = subj.findAllActive().collectList().block();
 
@@ -116,7 +116,12 @@ public class AdServiceTest {
 
         assertEquals(4, result2.size());
         assertEquals(0, result2.stream().filter(it -> !it.isActive()).count());
-        verify(adRepository, times(4)).deactivate(any());
+
+        AdDto result3 = subj.findById(ads.get(4).getId()).block();
+
+        assertNull(result3);
+
+        verify(adRepository, times(5)).deactivate(any());
     }
 
     //create
