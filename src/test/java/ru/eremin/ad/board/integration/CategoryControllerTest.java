@@ -60,7 +60,7 @@ public class CategoryControllerTest {
             new Category("c1"),
             new Category("c2"),
             new Category("c3")
-        ).forEach(category -> repository.insert(category).block());
+        ).forEach(category -> repository.save(category).block());
 
         client.get()
             .uri("/api/v1/category/all")

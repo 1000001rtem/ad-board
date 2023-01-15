@@ -1,11 +1,11 @@
-package ru.eremin.ad.board.business.service;
+package ru.eremin.ad.board.business.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-import ru.eremin.ad.board.business.service.api.CategoryService;
+import ru.eremin.ad.board.business.service.CategoryService;
 import ru.eremin.ad.board.business.service.dto.CategoryDto;
 import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
 import ru.eremin.ad.board.storage.model.Category;
@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (name == null || name.isBlank()) {
             return Mono.error(BAD_REQUEST.format("name").asException());
         }
-        return repository.insert(new Category(name))
+        return repository.save(new Category(name))
             .map(Category::getId)
             .subscribeOn(Schedulers.boundedElastic());
     }

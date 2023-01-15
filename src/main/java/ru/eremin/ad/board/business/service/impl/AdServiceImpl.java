@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.business.service;
+package ru.eremin.ad.board.business.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,8 +6,8 @@ import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-import ru.eremin.ad.board.business.service.api.AdService;
-import ru.eremin.ad.board.business.service.api.CategoryService;
+import ru.eremin.ad.board.business.service.AdService;
+import ru.eremin.ad.board.business.service.CategoryService;
 import ru.eremin.ad.board.business.service.dto.AdDto;
 import ru.eremin.ad.board.route.dto.CreateAdRequest;
 import ru.eremin.ad.board.route.dto.UpdateAdRequest;
@@ -60,7 +60,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Flux<AdDto> findAllActiveByCategory(final UUID categoryId) {
-        return repository.findByCategoryId(categoryId)
+        return repository.findAllActiveByCategoryId(categoryId)
             .filterWhen(ad -> deactivateIfOverdue(ad).map(Ad::isActive))
             .map(AdDto::new)
             .as(transactionalOperator::transactional)
@@ -86,7 +86,7 @@ public class AdServiceImpl implements AdService {
                 final LocalDateTime endDate = AdType.PAID.equals(request.getType())
                     ? LocalDateTime.now().plus(request.getDuration(), ChronoUnit.DAYS)
                     : null;
-                return repository.insert(
+                return repository.save(
                     new Ad()
                         .setTheme(request.getTheme())
                         .setText(request.getText())
@@ -118,7 +118,7 @@ public class AdServiceImpl implements AdService {
                         ad
                             .setText(req.getNewText() != null ? req.getNewText() : ad.getText())
                             .setTheme(req.getNewTheme() != null ? req.getNewTheme() : ad.getTheme());
-                        return repository.updateAd(ad);
+                        return repository.update(ad);
                     });
             })
             .map(Ad::getId)
@@ -138,7 +138,7 @@ public class AdServiceImpl implements AdService {
                         ad
                             .setType(AdType.PAID)
                             .setEndDate(LocalDateTime.now().plus(req.getDuration(), ChronoUnit.DAYS));
-                        return repository.updateAd(ad);
+                        return repository.update(ad);
                     });
             })
             .map(Ad::getId)

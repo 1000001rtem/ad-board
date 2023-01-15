@@ -37,7 +37,7 @@ public class Bootstrap {
             new Category().setId(foodCategory).setCategoryName("Продукты питания")
         ).forEach(it -> {
             categoryRepository
-                .insert(it)
+                .save(it)
                 .doOnSuccess(category -> log.info(category.getCategoryName() + " - " + category.getId()))
                 .subscribe();
         });
@@ -67,7 +67,7 @@ public class Bootstrap {
                 .setActive(false)
         ).forEach(it -> {
             adRepository
-                .insert(it)
+                .save(it)
                 .doOnSuccess(ad -> log.info(ad.getTheme() + " - " + ad.getId()))
                 .block();
         });

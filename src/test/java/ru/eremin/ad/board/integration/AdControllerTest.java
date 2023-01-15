@@ -69,7 +69,7 @@ public class AdControllerTest {
 
     @Test
     void should_find_ad_by_category() {
-        UUID categoryId = categoryRepository.insert(new Category("test")).block().getId();
+        UUID categoryId = categoryRepository.save(new Category("test")).block().getId();
 
         List.of(
             TestUtils.defaultAd().setCategoryId(categoryId),
@@ -80,7 +80,7 @@ public class AdControllerTest {
             TestUtils.defaultAd(),
             TestUtils.defaultAd(),
             TestUtils.defaultAd()
-        ).forEach(ad -> adRepository.insert(ad).block());
+        ).forEach(ad -> adRepository.save(ad).block());
 
         client.get()
             .uri(uriBuilder ->
@@ -98,7 +98,7 @@ public class AdControllerTest {
 
     @Test
     void should_filter_and_deactivate_overdue_ads() {
-        UUID categoryId = categoryRepository.insert(new Category("test")).block().getId();
+        UUID categoryId = categoryRepository.save(new Category("test")).block().getId();
 
         List.of(
             TestUtils.defaultAd().setCategoryId(categoryId),
@@ -111,7 +111,7 @@ public class AdControllerTest {
             TestUtils.defaultAd(),
             TestUtils.defaultAd(),
             TestUtils.defaultAd()
-        ).forEach(ad -> adRepository.insert(ad).block());
+        ).forEach(ad -> adRepository.save(ad).block());
 
         client.get()
             .uri(uriBuilder ->
@@ -139,7 +139,7 @@ public class AdControllerTest {
     void should_find_by_id() {
         var id = UUID.randomUUID();
 
-        adRepository.insert(TestUtils.defaultAd().setId(id)).block();
+        adRepository.save(TestUtils.defaultAd().setId(id)).block();
 
         client.get()
             .uri(uriBuilder ->
@@ -174,7 +174,7 @@ public class AdControllerTest {
 
     @Test
     void should_create_ad() throws JsonProcessingException {
-        UUID categoryId = categoryRepository.insert(new Category("test")).block().getId();
+        UUID categoryId = categoryRepository.save(new Category("test")).block().getId();
 
         client.post()
             .uri("/api/v1/ad/create")
@@ -204,7 +204,7 @@ public class AdControllerTest {
 
     @Test
     void should_update_ad() throws JsonProcessingException {
-        Ad ad = adRepository.insert(TestUtils.defaultAd()).block();
+        Ad ad = adRepository.save(TestUtils.defaultAd()).block();
 
         client.put()
             .uri("/api/v1/ad/update")
@@ -229,7 +229,7 @@ public class AdControllerTest {
 
     @Test
     void should_upgrade_ad() throws JsonProcessingException {
-        Ad ad = adRepository.insert(TestUtils.defaultAd()).block();
+        Ad ad = adRepository.save(TestUtils.defaultAd()).block();
 
         client.put()
             .uri("/api/v1/ad/upgrade")

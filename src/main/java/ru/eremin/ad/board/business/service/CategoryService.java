@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.business.service.api;
+package ru.eremin.ad.board.business.service;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

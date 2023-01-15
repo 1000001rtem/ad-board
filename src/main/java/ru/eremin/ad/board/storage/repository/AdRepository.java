@@ -1,137 +1,41 @@
 package ru.eremin.ad.board.storage.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
-import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.storage.model.Ad;
 
 import java.util.UUID;
 
-import static org.springframework.data.relational.core.query.Criteria.where;
-import static org.springframework.data.relational.core.query.Query.query;
-import static org.springframework.data.relational.core.query.Update.update;
-
-/**
- * Репозиторий для объявлений
- */
-@Repository
-public class AdRepository {
-
-    private final R2dbcEntityTemplate template;
-
-    @Autowired
-    public AdRepository(final R2dbcEntityTemplate template) {
-        this.template = template;
-    }
+public interface AdRepository extends BaseRepository<Ad, UUID> {
 
     /**
-     * Поиск всех объявлений
+     * Find all ad with active=true
      *
-     * @return {@link Flux} список всех обхявлений
+     * @return {@link Flux} ads list never null
      */
-    public Flux<Ad> findAll() {
-        return template.select(Ad.class)
-            .all();
-    }
+    Flux<Ad> findAllActive();
 
     /**
-     * Поиск всех активных объявлений
+     * Find all ad with active=true by category id
      *
-     * @return {@link Flux} список всех объявлений
+     * @param categoryId UUID
+     * @return {@link Flux} ads list never null
      */
-    public Flux<Ad> findAllActive() {
-        return template.select(Ad.class)
-            .matching(query(where("active").isTrue()))
-            .all();
-    }
+    Flux<Ad> findAllActiveByCategoryId(UUID id);
 
     /**
-     * Поиск всех объявлений в категории
+     * Deactivate ad
      *
-     * @param categoryId идентификатор каотегории
-     * @return {@link Flux} список всех объявлений в категории
+     * @param id UUID
+     * @return {@link Mono} the number of records changed or an error if the number is different from 1.
      */
-    public Flux<Ad> findByCategoryId(UUID categoryId) {
-        return template.select(Ad.class)
-            .matching(
-                query(
-                    where("categoryId").is(categoryId)
-                        .and(where("active").isTrue())
-                )
-            )
-            .all();
-    }
-
-    /**
-     * Поиск объявления по id
-     *
-     * @param id индентификатор объявления
-     * @return {@link Mono} объявление
-     */
-    public Mono<Ad> findById(UUID id) {
-        return template.selectOne(
-            query(where("ad_id").is(id)),
-            Ad.class
-        );
-    }
-
-    /**
-     * Сохранение объявления
-     *
-     * @param ad объект объявления
-     * @return {@link Mono} сохранённое объявление
-     */
-    public Mono<Ad> insert(Ad ad) {
-        return template.insert(Ad.class)
-            .using(ad);
-    }
-
-    /**
-     * Обновление объявления
-     *
-     * @param ad объект объявления
-     * @return {@link Mono} обновлённое объявление
-     */
-    public Mono<Ad> updateAd(Ad ad) {
-        return template.update(ad);
-    }
-
-    /**
-     * Деактивировать объявление
-     *
-     * @param id индентификатор объявления
-     * @return {@link Mono} количество изменнёных записей или ошибку если кол-во отлично от 1.
-     */
-    public Mono<Integer> deactivate(UUID id) {
-        return template.update(Ad.class)
-            .matching(query(where("ad_id").is(id)))
-            .apply(update("active", false))
-            .handle((it, sink) -> {
-                if (it != 1) {
-                    sink.error(new RuntimeException());
-                }
-                sink.next(it);
-            });
-    }
+    Mono<Integer> deactivate(UUID id);
 
     /**
      * Активация объявление
      *
-     * @param id индентификатор объявления
-     * @return {@link Mono} количество изменнёных записей или ошибку если кол-во отлично от 1.
+     * @param id UUID
+     * @return {@link Mono} the number of records changed or an error if the number is different from 1.
      */
-    public Mono<Integer> activate(UUID id) {
-        return template.update(Ad.class)
-            .matching(query(where("ad_id").is(id)))
-            .apply(update("active", true))
-            .handle((it, sink) -> {
-                if (it != 1) {
-                    sink.error(new RuntimeException());
-                }
-                sink.next(it);
-            });
-    }
-
+    Mono<Integer> activate(UUID id);
 }

@@ -7,11 +7,11 @@ import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-import ru.eremin.ad.board.business.service.AdServiceImpl;
-import ru.eremin.ad.board.business.service.CategoryServiceImpl;
-import ru.eremin.ad.board.business.service.api.AdService;
-import ru.eremin.ad.board.business.service.api.CategoryService;
+import ru.eremin.ad.board.business.service.AdService;
+import ru.eremin.ad.board.business.service.CategoryService;
 import ru.eremin.ad.board.business.service.dto.AdDto;
+import ru.eremin.ad.board.business.service.impl.AdServiceImpl;
+import ru.eremin.ad.board.business.service.impl.CategoryServiceImpl;
 import ru.eremin.ad.board.route.dto.CreateAdRequest;
 import ru.eremin.ad.board.route.dto.UpdateAdRequest;
 import ru.eremin.ad.board.route.dto.UpgradeAdRequest;
@@ -104,7 +104,7 @@ public class AdServiceTest {
         );
 
         when(adRepository.findAllActive()).thenReturn(Flux.fromIterable(ads));
-        when(adRepository.findByCategoryId(any())).thenReturn(Flux.fromIterable(ads));
+        when(adRepository.findAllActiveByCategoryId(any())).thenReturn(Flux.fromIterable(ads));
         when(adRepository.deactivate(any())).thenReturn(Mono.just(1));
         when(adRepository.findById(any())).thenReturn(Mono.just(ads.get(4)));
 
@@ -144,7 +144,7 @@ public class AdServiceTest {
             })
             .verify();
 
-        verify(adRepository, never()).insert(any());
+        verify(adRepository, never()).save(any());
     }
 
     @Test
@@ -161,7 +161,7 @@ public class AdServiceTest {
             })
             .verify();
 
-        verify(adRepository, never()).insert(any());
+        verify(adRepository, never()).save(any());
     }
 
     //update
@@ -183,7 +183,7 @@ public class AdServiceTest {
             })
             .verify();
 
-        verify(adRepository, never()).updateAd(any());
+        verify(adRepository, never()).update(any());
     }
 
     @Test
@@ -204,7 +204,7 @@ public class AdServiceTest {
             })
             .verify();
 
-        verify(adRepository, never()).updateAd(any());
+        verify(adRepository, never()).update(any());
     }
 
     @Test
@@ -212,7 +212,7 @@ public class AdServiceTest {
         Ad ad = defaultAd();
         ArgumentCaptor<Ad> captor = ArgumentCaptor.forClass(Ad.class);
         when(adRepository.findById(any())).thenReturn(Mono.just(ad));
-        when(adRepository.updateAd(captor.capture())).thenReturn(Mono.just(ad));
+        when(adRepository.update(captor.capture())).thenReturn(Mono.just(ad));
 
         UpdateAdRequest request = new UpdateAdRequest(UUID.randomUUID(), "new", "new", null);
 
@@ -246,7 +246,7 @@ public class AdServiceTest {
             })
             .verify();
 
-        verify(adRepository, never()).updateAd(any());
+        verify(adRepository, never()).update(any());
     }
 
     @Test
@@ -254,7 +254,7 @@ public class AdServiceTest {
         Ad ad = defaultAd();
         ArgumentCaptor<Ad> captor = ArgumentCaptor.forClass(Ad.class);
         when(adRepository.findById(eq(ad.getId()))).thenReturn(Mono.just(ad));
-        when(adRepository.updateAd(captor.capture())).thenReturn(Mono.just(ad));
+        when(adRepository.update(captor.capture())).thenReturn(Mono.just(ad));
 
         UpgradeAdRequest request = new UpgradeAdRequest(ad.getId(), 5L);
         subj.upgradeAd(request)
