@@ -12,12 +12,12 @@ import ru.eremin.ad.board.util.error.CriticalException;
 import java.util.function.Function;
 
 /**
- * Трансформации для ответов сервиса
+ * Api response transformation
  */
 public class ResponseTransformers {
 
     /**
-     * Трансформация ответа с error сигналом в типизированную ошибку сервиса
+     * Transforming a response with an error signal into a typed service error
      */
     public static Function<Mono<ServerResponse>, Mono<ServerResponse>> errorResponseTransformer() {
         return (response) -> response

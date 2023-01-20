@@ -18,12 +18,12 @@ import static org.springframework.data.relational.core.query.Query.query;
  * Репозиторий для объявлений
  */
 @Repository
-public class ReactiveAdRepository implements AdRepository {
+public class ReactiveSqlAdRepository implements AdRepository {
 
     private final R2dbcEntityTemplate template;
 
     @Autowired
-    public ReactiveAdRepository(final R2dbcEntityTemplate template) {
+    public ReactiveSqlAdRepository(final R2dbcEntityTemplate template) {
         this.template = template;
     }
 

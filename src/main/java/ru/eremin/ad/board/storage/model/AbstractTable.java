@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * Базовый набор полей для таблиц.
+ * Base database fields
  */
 @Data
 abstract public class AbstractTable {

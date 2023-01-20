@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 public class TestUtils {
 
     /**
-     * Консюмер для логирования запроса и ответа для {@link org.springframework.test.web.reactive.server.WebTestClient}
+     * Consumer for logging request and response for {@link org.springframework.test.web.reactive.server.WebTestClient}
      */
     public static Consumer<EntityExchangeResult<byte[]>> logConsumer(ObjectMapper mapper, Logger log) {
         return exchangeResult -> {

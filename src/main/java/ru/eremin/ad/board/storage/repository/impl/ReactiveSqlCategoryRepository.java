@@ -14,12 +14,12 @@ import java.util.UUID;
 import static org.springframework.data.relational.core.query.Criteria.where;
 
 @Repository
-public class ReactiveCategoryRepository implements CategoryRepository {
+public class ReactiveSqlCategoryRepository implements CategoryRepository {
 
     private final R2dbcEntityTemplate template;
 
     @Autowired
-    public ReactiveCategoryRepository(final R2dbcEntityTemplate template) {
+    public ReactiveSqlCategoryRepository(final R2dbcEntityTemplate template) {
         this.template = template;
     }
 
