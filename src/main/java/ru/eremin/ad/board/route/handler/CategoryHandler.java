@@ -12,15 +12,18 @@ import ru.eremin.ad.board.business.service.dto.CategoryDto;
 import ru.eremin.ad.board.route.dto.AdBoardResponseItem;
 import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
 import ru.eremin.ad.board.util.transformer.ResponseTransformers;
+import ru.eremin.ad.board.util.validation.ValidationService;
 
 @Component
 public class CategoryHandler {
 
     private final CategoryService service;
+    private final ValidationService validationService;
 
     @Autowired
-    public CategoryHandler(final CategoryService service) {
+    public CategoryHandler(final CategoryService service, final ValidationService validationService) {
         this.service = service;
+        this.validationService = validationService;
     }
 
     public Mono<ServerResponse> findAll(ServerRequest request) {
@@ -37,6 +40,7 @@ public class CategoryHandler {
 
     public Mono<ServerResponse> create(ServerRequest request) {
         return request.bodyToMono(CreateCategoryRequest.class)
+            .flatMap(validationService::validate)
             .flatMap(service::create)
             .flatMap(result ->
                 ServerResponse.ok()

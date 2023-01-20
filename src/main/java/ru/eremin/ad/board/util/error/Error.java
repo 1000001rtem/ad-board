@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Абстракция ошибки
+ *  Error abstraction
  */
 public interface Error {
     String getCode();
@@ -14,7 +14,7 @@ public interface Error {
     String getDisplayMessage();
 
     /**
-     * Превращает ошибку в exception
+     * Convert Error to exception
      *
      * @return {@link AdBoardException}
      */
@@ -23,7 +23,7 @@ public interface Error {
     }
 
     /**
-     * Форматирует сообщение об ошибке
+     * Format error message
      */
     default Error format(String... values) {
         return new FormattedError(getCode(), String.format(getMessage(), values), getDisplayMessage());

@@ -1,5 +1,6 @@
 package ru.eremin.ad.board.route.handler;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -12,17 +13,16 @@ import ru.eremin.ad.board.route.dto.UpdateAdRequest;
 import ru.eremin.ad.board.route.dto.UpgradeAdRequest;
 import ru.eremin.ad.board.util.error.Errors;
 import ru.eremin.ad.board.util.transformer.ResponseTransformers;
+import ru.eremin.ad.board.util.validation.ValidationService;
 
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class AdHandler {
 
     private final AdService service;
-
-    public AdHandler(final AdService service) {
-        this.service = service;
-    }
+    private final ValidationService validationService;
 
     public Mono<ServerResponse> findByCategory(ServerRequest request) {
         return Mono.just(request.queryParam("category-id")
@@ -60,6 +60,7 @@ public class AdHandler {
 
     public Mono<ServerResponse> create(final ServerRequest request) {
         return request.bodyToMono(CreateAdRequest.class)
+            .flatMap(validationService::validate)
             .flatMap(service::create)
             .flatMap(result ->
                 ServerResponse.ok()
@@ -71,6 +72,7 @@ public class AdHandler {
 
     public Mono<ServerResponse> update(final ServerRequest request) {
         return request.bodyToMono(UpdateAdRequest.class)
+            .flatMap(validationService::validate)
             .flatMap(service::updateAd)
             .flatMap(result ->
                 ServerResponse.ok()
@@ -82,6 +84,7 @@ public class AdHandler {
 
     public Mono<ServerResponse> upgrade(final ServerRequest request) {
         return request.bodyToMono(UpgradeAdRequest.class)
+            .flatMap(validationService::validate)
             .flatMap(service::upgradeAd)
             .flatMap(result ->
                 ServerResponse.ok()
