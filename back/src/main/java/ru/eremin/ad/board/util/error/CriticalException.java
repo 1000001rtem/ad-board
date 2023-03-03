@@ -3,7 +3,7 @@ package ru.eremin.ad.board.util.error;
 import lombok.Getter;
 
 @Getter
-public class CriticalException extends RuntimeException {
+public class CriticalException extends AdBoardException {
 
     private final String code;
     private final String message;

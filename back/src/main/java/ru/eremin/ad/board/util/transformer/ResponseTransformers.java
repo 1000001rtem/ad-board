@@ -1,5 +1,7 @@
 package ru.eremin.ad.board.util.transformer;
 
+import java.util.function.Function;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -8,12 +10,12 @@ import ru.eremin.ad.board.route.dto.AdBoardResponseItem;
 import ru.eremin.ad.board.route.dto.ErrorResponse;
 import ru.eremin.ad.board.util.error.AdBoardException;
 import ru.eremin.ad.board.util.error.CriticalException;
-
-import java.util.function.Function;
+import ru.eremin.ad.board.util.error.Errors;
 
 /**
  * Api response transformation
  */
+@Log4j2
 public class ResponseTransformers {
 
     /**
@@ -24,23 +26,37 @@ public class ResponseTransformers {
             .onErrorResume(err -> {
                 if (err instanceof AdBoardException) {
                     final AdBoardException error = (AdBoardException) err;
-                    final ErrorResponse errorResponse = new ErrorResponse()
-                        .setCode(error.getCode())
-                        .setMessage(error.getMessage())
-                        .setDisplayMessage(error.getDisplayMessage());
-                    return ServerResponse.status(HttpStatus.OK)
+                    return ServerResponse.status(getResponseCode(error.getCode()))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(AdBoardResponseItem.error(errorResponse));
+                        .bodyValue(AdBoardResponseItem.error(buildErrorResponse(error)));
                 } else {
                     final CriticalException error = new CriticalException(err);
-                    final ErrorResponse errorResponse = new ErrorResponse()
-                        .setCode(error.getCode())
-                        .setMessage(error.getMessage());
-                    err.printStackTrace();
-                    return ServerResponse.status(HttpStatus.OK)
+                    log.error(error);
+                    return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(AdBoardResponseItem.error(errorResponse));
+                        .bodyValue(AdBoardResponseItem.error(buildErrorResponse(error)));
                 }
             });
+    }
+
+    private static ErrorResponse buildErrorResponse(AdBoardException exception) {
+        return new ErrorResponse()
+            .setCode(exception.getCode())
+            .setMessage(exception.getMessage())
+            .setDisplayMessage(exception.getDisplayMessage());
+    }
+
+    private static HttpStatus getResponseCode(String errorCode) {
+        var error = Errors.valueOf(errorCode);
+        switch (error) {
+            case BAD_REQUEST:
+                return HttpStatus.BAD_REQUEST;
+            case EMPTY_DURATION:
+            case CATEGORY_DOES_NOT_EXIST:
+            case AD_DOES_NOT_EXIST:
+                return HttpStatus.INTERNAL_SERVER_ERROR;
+            default:
+                throw new IllegalStateException("Unexpected value: " + errorCode);
+        }
     }
 }

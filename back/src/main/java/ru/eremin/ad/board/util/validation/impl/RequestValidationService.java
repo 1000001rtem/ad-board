@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.util.validation.serviceImpl;
+package ru.eremin.ad.board.util.validation.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

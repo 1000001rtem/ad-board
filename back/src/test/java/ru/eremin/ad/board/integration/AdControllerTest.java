@@ -272,7 +272,7 @@ public class AdControllerTest {
                 )))
             )
             .exchange()
-            .expectStatus().isOk()
+            .expectStatus().is5xxServerError()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
             .jsonPath("$.error.code").isEqualTo("CATEGORY_DOES_NOT_EXIST")
