@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.storage.repository.impl;
+package ru.eremin.ad.board.output.storage.repository.impl;
 
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +7,8 @@ import org.springframework.data.relational.core.query.Update;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.eremin.ad.board.storage.model.Ad;
-import ru.eremin.ad.board.storage.repository.AdRepository;
+import ru.eremin.ad.board.output.storage.repository.AdRepository;
+import ru.eremin.ad.board.output.storage.model.Ad;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;

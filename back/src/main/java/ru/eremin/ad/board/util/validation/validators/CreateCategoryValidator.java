@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
+import ru.eremin.ad.board.input.route.dto.CreateCategoryRequest;
 
 @Component
 public class CreateCategoryValidator implements Validator {

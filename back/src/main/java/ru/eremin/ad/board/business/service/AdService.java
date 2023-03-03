@@ -4,9 +4,9 @@ import java.util.UUID;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.dto.AdDto;
-import ru.eremin.ad.board.route.dto.CreateAdRequest;
-import ru.eremin.ad.board.route.dto.UpdateAdRequest;
-import ru.eremin.ad.board.route.dto.UpgradeAdRequest;
+import ru.eremin.ad.board.input.route.dto.CreateAdRequest;
+import ru.eremin.ad.board.input.route.dto.UpdateAdRequest;
+import ru.eremin.ad.board.input.route.dto.UpgradeAdRequest;
 
 /**
  * Service for working with ads.

@@ -4,8 +4,8 @@ import java.util.UUID;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.dto.CategoryDto;
-import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
-import ru.eremin.ad.board.storage.model.Category;
+import ru.eremin.ad.board.input.route.dto.CreateCategoryRequest;
+import ru.eremin.ad.board.output.storage.model.Category;
 
 /**
  * Service for working with ad categories.

@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.event;
+package ru.eremin.ad.board.business.event;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -10,13 +10,13 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import ru.eremin.ad.board.storage.model.Ad;
-import ru.eremin.ad.board.storage.model.Category;
-import ru.eremin.ad.board.storage.repository.AdRepository;
-import ru.eremin.ad.board.storage.repository.CategoryRepository;
+import ru.eremin.ad.board.output.storage.model.Ad;
+import ru.eremin.ad.board.output.storage.model.Category;
+import ru.eremin.ad.board.output.storage.repository.AdRepository;
+import ru.eremin.ad.board.output.storage.repository.CategoryRepository;
 
-import static ru.eremin.ad.board.storage.model.enumirate.AdType.FREE;
-import static ru.eremin.ad.board.storage.model.enumirate.AdType.PAID;
+import static ru.eremin.ad.board.output.storage.model.enumirate.AdType.FREE;
+import static ru.eremin.ad.board.output.storage.model.enumirate.AdType.PAID;
 
 @Log4j2
 @Component

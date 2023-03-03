@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.storage.repository;
+package ru.eremin.ad.board.output.storage.repository;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

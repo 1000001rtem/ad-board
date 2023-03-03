@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.storage.model;
+package ru.eremin.ad.board.output.storage.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-import ru.eremin.ad.board.storage.model.enumirate.AdType;
+import ru.eremin.ad.board.output.storage.model.enumirate.AdType;
 
 @Data
 @Table("ads")

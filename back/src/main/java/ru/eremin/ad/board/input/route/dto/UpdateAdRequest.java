@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.route.dto;
+package ru.eremin.ad.board.input.route.dto;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -9,9 +9,10 @@ import org.springframework.lang.Nullable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpgradeAdRequest {
+public class UpdateAdRequest {
     @Nullable
     private UUID id;
-    @Nullable
-    private Long duration;
+    private String newTheme = null;
+    private String newText = null;
+    private UUID newCategoryId = null;
 }

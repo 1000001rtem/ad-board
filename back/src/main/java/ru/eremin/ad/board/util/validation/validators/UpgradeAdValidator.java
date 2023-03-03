@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import ru.eremin.ad.board.route.dto.UpgradeAdRequest;
+import ru.eremin.ad.board.input.route.dto.UpgradeAdRequest;
 
 @Component
 public class UpgradeAdValidator implements Validator {

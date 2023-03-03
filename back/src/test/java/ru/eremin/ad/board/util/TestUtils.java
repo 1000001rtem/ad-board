@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.slf4j.Logger;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
-import ru.eremin.ad.board.storage.model.Ad;
-import ru.eremin.ad.board.storage.model.enumirate.AdType;
+import ru.eremin.ad.board.output.storage.model.Ad;
+import ru.eremin.ad.board.output.storage.model.enumirate.AdType;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

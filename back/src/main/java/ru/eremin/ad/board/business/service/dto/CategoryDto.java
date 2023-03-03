@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import ru.eremin.ad.board.storage.model.Category;
+import ru.eremin.ad.board.output.storage.model.Category;
 
 @Data
 @NoArgsConstructor

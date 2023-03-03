@@ -7,8 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.lang.NonNull;
-import ru.eremin.ad.board.storage.model.Ad;
-import ru.eremin.ad.board.storage.model.enumirate.AdType;
+import ru.eremin.ad.board.output.storage.model.Ad;
+import ru.eremin.ad.board.output.storage.model.enumirate.AdType;
 
 @Data
 @AllArgsConstructor

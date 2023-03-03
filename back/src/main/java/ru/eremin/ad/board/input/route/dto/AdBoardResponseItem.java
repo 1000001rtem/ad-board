@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.route.dto;
+package ru.eremin.ad.board.input.route.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

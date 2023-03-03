@@ -12,12 +12,12 @@ import ru.eremin.ad.board.business.service.CategoryService;
 import ru.eremin.ad.board.business.service.dto.AdDto;
 import ru.eremin.ad.board.business.service.impl.AdServiceImpl;
 import ru.eremin.ad.board.business.service.impl.CategoryServiceImpl;
-import ru.eremin.ad.board.route.dto.CreateAdRequest;
-import ru.eremin.ad.board.route.dto.UpdateAdRequest;
-import ru.eremin.ad.board.route.dto.UpgradeAdRequest;
-import ru.eremin.ad.board.storage.model.Ad;
-import ru.eremin.ad.board.storage.model.enumirate.AdType;
-import ru.eremin.ad.board.storage.repository.AdRepository;
+import ru.eremin.ad.board.input.route.dto.CreateAdRequest;
+import ru.eremin.ad.board.input.route.dto.UpdateAdRequest;
+import ru.eremin.ad.board.input.route.dto.UpgradeAdRequest;
+import ru.eremin.ad.board.output.storage.model.Ad;
+import ru.eremin.ad.board.output.storage.model.enumirate.AdType;
+import ru.eremin.ad.board.output.storage.repository.AdRepository;
 import ru.eremin.ad.board.util.error.AdBoardException;
 import ru.eremin.ad.board.util.error.Errors;
 

@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.storage.callback;
+package ru.eremin.ad.board.output.storage.callback;
 
 import java.time.LocalDateTime;
 import org.reactivestreams.Publisher;
@@ -8,9 +8,9 @@ import org.springframework.data.relational.core.sql.SqlIdentifier;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.UserService;
-import ru.eremin.ad.board.storage.model.AbstractTable;
-import ru.eremin.ad.board.storage.model.Ad;
-import ru.eremin.ad.board.storage.model.Category;
+import ru.eremin.ad.board.output.storage.model.AbstractTable;
+import ru.eremin.ad.board.output.storage.model.Ad;
+import ru.eremin.ad.board.output.storage.model.Category;
 
 @Component
 class AdBeforeConvertCallback implements BeforeConvertCallback<Ad> {

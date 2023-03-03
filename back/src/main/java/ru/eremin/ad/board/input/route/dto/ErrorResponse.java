@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.route.dto;
+package ru.eremin.ad.board.input.route.dto;
 
 import java.time.Instant;
 import lombok.AllArgsConstructor;

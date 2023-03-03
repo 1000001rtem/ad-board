@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.route.handler;
+package ru.eremin.ad.board.input.route.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -9,8 +9,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.CategoryService;
 import ru.eremin.ad.board.business.service.dto.CategoryDto;
-import ru.eremin.ad.board.route.dto.AdBoardResponseItem;
-import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
+import ru.eremin.ad.board.input.route.dto.AdBoardResponseItem;
+import ru.eremin.ad.board.input.route.dto.CreateCategoryRequest;
 import ru.eremin.ad.board.util.transformer.ResponseTransformers;
 import ru.eremin.ad.board.util.validation.ValidationService;
 

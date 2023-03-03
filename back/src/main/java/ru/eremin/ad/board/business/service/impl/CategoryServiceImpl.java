@@ -8,9 +8,9 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import ru.eremin.ad.board.business.service.CategoryService;
 import ru.eremin.ad.board.business.service.dto.CategoryDto;
-import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
-import ru.eremin.ad.board.storage.model.Category;
-import ru.eremin.ad.board.storage.repository.CategoryRepository;
+import ru.eremin.ad.board.input.route.dto.CreateCategoryRequest;
+import ru.eremin.ad.board.output.storage.model.Category;
+import ru.eremin.ad.board.output.storage.repository.CategoryRepository;
 
 import static ru.eremin.ad.board.util.error.Errors.BAD_REQUEST;
 

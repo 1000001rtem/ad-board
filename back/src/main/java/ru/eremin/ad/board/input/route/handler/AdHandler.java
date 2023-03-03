@@ -1,4 +1,4 @@
-package ru.eremin.ad.board.route.handler;
+package ru.eremin.ad.board.input.route.handler;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +8,10 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.AdService;
-import ru.eremin.ad.board.route.dto.AdBoardResponseItem;
-import ru.eremin.ad.board.route.dto.CreateAdRequest;
-import ru.eremin.ad.board.route.dto.UpdateAdRequest;
-import ru.eremin.ad.board.route.dto.UpgradeAdRequest;
+import ru.eremin.ad.board.input.route.dto.AdBoardResponseItem;
+import ru.eremin.ad.board.input.route.dto.CreateAdRequest;
+import ru.eremin.ad.board.input.route.dto.UpdateAdRequest;
+import ru.eremin.ad.board.input.route.dto.UpgradeAdRequest;
 import ru.eremin.ad.board.util.error.Errors;
 import ru.eremin.ad.board.util.transformer.ResponseTransformers;
 import ru.eremin.ad.board.util.validation.ValidationService;
