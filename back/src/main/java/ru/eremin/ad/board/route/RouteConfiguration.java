@@ -29,6 +29,7 @@ public class RouteConfiguration {
         return route()
             .path("/api/v1/ad", builder ->
                 builder
+                    .GET("/find-all-active", accept(MediaType.APPLICATION_JSON), handler::findAllActive)
                     .GET("/find-by-category", accept(MediaType.APPLICATION_JSON), handler::findByCategory)
                     .GET("/find-by-id", accept(MediaType.APPLICATION_JSON), handler::findById)
                     .POST("/create", accept(MediaType.APPLICATION_JSON), handler::create)

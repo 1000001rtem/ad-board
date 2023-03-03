@@ -103,12 +103,12 @@ public class AdServiceTest {
             defaultAd().setText("noop").setType(AdType.PAID).setEndDate(LocalDateTime.now().minus(1, ChronoUnit.MINUTES)) // должен отфильтроваться
         );
 
-        when(adRepository.findAllActive()).thenReturn(Flux.fromIterable(ads));
+        when(adRepository.findAllActive(-1)).thenReturn(Flux.fromIterable(ads));
         when(adRepository.findAllActiveByCategoryId(any())).thenReturn(Flux.fromIterable(ads));
         when(adRepository.deactivate(any())).thenReturn(Mono.just(1));
         when(adRepository.findById(any())).thenReturn(Mono.just(ads.get(4)));
 
-        List<AdDto> result = subj.findAllActive().collectList().block();
+        List<AdDto> result = subj.findAllActive(-1).collectList().block();
 
         assertEquals(4, result.size());
         assertEquals(0, result.stream().filter(it -> !it.isActive()).count());

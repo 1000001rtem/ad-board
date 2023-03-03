@@ -1,5 +1,7 @@
 package ru.eremin.ad.board.util.validation.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -8,9 +10,6 @@ import org.springframework.validation.Validator;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.util.error.Errors;
 import ru.eremin.ad.board.util.validation.ValidationService;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor

@@ -1,5 +1,6 @@
 package ru.eremin.ad.board.business.service.impl;
 
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -10,8 +11,6 @@ import ru.eremin.ad.board.business.service.dto.CategoryDto;
 import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
 import ru.eremin.ad.board.storage.model.Category;
 import ru.eremin.ad.board.storage.repository.CategoryRepository;
-
-import java.util.UUID;
 
 import static ru.eremin.ad.board.util.error.Errors.BAD_REQUEST;
 

@@ -1,12 +1,11 @@
 package ru.eremin.ad.board.business.service;
 
+import java.util.UUID;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.dto.CategoryDto;
 import ru.eremin.ad.board.route.dto.CreateCategoryRequest;
 import ru.eremin.ad.board.storage.model.Category;
-
-import java.util.UUID;
 
 /**
  * Service for working with ad categories.

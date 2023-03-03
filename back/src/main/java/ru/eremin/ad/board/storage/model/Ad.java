@@ -1,5 +1,7 @@
 package ru.eremin.ad.board.storage.model;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,9 +11,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import ru.eremin.ad.board.storage.model.enumirate.AdType;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Table("ads")

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- *  Error abstraction
+ * Error abstraction
  */
 public interface Error {
     String getCode();

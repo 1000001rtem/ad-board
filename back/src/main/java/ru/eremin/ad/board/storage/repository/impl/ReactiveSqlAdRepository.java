@@ -1,5 +1,6 @@
 package ru.eremin.ad.board.storage.repository.impl;
 
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Update;
@@ -9,14 +10,10 @@ import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.storage.model.Ad;
 import ru.eremin.ad.board.storage.repository.AdRepository;
 
-import java.util.UUID;
-
 import static org.springframework.data.relational.core.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;
 
-/**
- * Репозиторий для объявлений
- */
+
 @Repository
 public class ReactiveSqlAdRepository implements AdRepository {
 
@@ -27,20 +24,18 @@ public class ReactiveSqlAdRepository implements AdRepository {
         this.template = template;
     }
 
-    /**
-     * Поиск всех объявлений
-     *
-     * @return {@link Flux} список всех обхявлений
-     */
+
+    @Override
     public Flux<Ad> findAll() {
         return template.select(Ad.class)
             .all();
     }
 
     @Override
-    public Flux<Ad> findAllActive() {
+    public Flux<Ad> findAllActive(Integer incomeLimit) {
+        var limit = incomeLimit == null ? 0 : incomeLimit;
         return template.select(Ad.class)
-            .matching(query(where("active").isTrue()))
+            .matching(query(where("active").isTrue()).limit(limit))
             .all();
     }
 
@@ -56,12 +51,6 @@ public class ReactiveSqlAdRepository implements AdRepository {
             .all();
     }
 
-    /**
-     * Поиск объявления по id
-     *
-     * @param id индентификатор объявления
-     * @return {@link Mono} объявление
-     */
     @Override
     public Mono<Ad> findById(UUID id) {
         return template.selectOne(
@@ -76,12 +65,6 @@ public class ReactiveSqlAdRepository implements AdRepository {
             .using(ad);
     }
 
-    /**
-     * Обновление объявления
-     *
-     * @param ad объект объявления
-     * @return {@link Mono} обновлённое объявление
-     */
     @Override
     public Mono<Ad> update(Ad ad) {
         return template.update(ad);
@@ -100,12 +83,6 @@ public class ReactiveSqlAdRepository implements AdRepository {
             });
     }
 
-    /**
-     * Активация объявление
-     *
-     * @param id индентификатор объявления
-     * @return {@link Mono} количество изменнёных записей или ошибку если кол-во отлично от 1.
-     */
     @Override
     public Mono<Integer> activate(UUID id) {
         return template.update(Ad.class)

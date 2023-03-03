@@ -1,13 +1,12 @@
 package ru.eremin.ad.board.business.service;
 
+import java.util.UUID;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.business.service.dto.AdDto;
 import ru.eremin.ad.board.route.dto.CreateAdRequest;
 import ru.eremin.ad.board.route.dto.UpdateAdRequest;
 import ru.eremin.ad.board.route.dto.UpgradeAdRequest;
-
-import java.util.UUID;
 
 /**
  * Service for working with ads.
@@ -28,9 +27,10 @@ public interface AdService {
      * For paid ads, the expiration date is checked and then ad deactivated if expired.
      * Executed transactionally.
      *
+     * @param limit if null all ads will be return
      * @return {@link Flux} ads list (dto)
      */
-    Flux<AdDto> findAllActive();
+    Flux<AdDto> findAllActive(Integer limit);
 
     /**
      * Find all active ads in a given category.

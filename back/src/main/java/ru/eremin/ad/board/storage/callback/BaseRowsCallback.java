@@ -1,5 +1,6 @@
 package ru.eremin.ad.board.storage.callback;
 
+import java.time.LocalDateTime;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.mapping.event.BeforeConvertCallback;
@@ -10,8 +11,6 @@ import ru.eremin.ad.board.business.service.UserService;
 import ru.eremin.ad.board.storage.model.AbstractTable;
 import ru.eremin.ad.board.storage.model.Ad;
 import ru.eremin.ad.board.storage.model.Category;
-
-import java.time.LocalDateTime;
 
 @Component
 class AdBeforeConvertCallback implements BeforeConvertCallback<Ad> {

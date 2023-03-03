@@ -1,5 +1,6 @@
 package ru.eremin.ad.board.route.handler;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -14,8 +15,6 @@ import ru.eremin.ad.board.route.dto.UpgradeAdRequest;
 import ru.eremin.ad.board.util.error.Errors;
 import ru.eremin.ad.board.util.transformer.ResponseTransformers;
 import ru.eremin.ad.board.util.validation.ValidationService;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -92,5 +91,20 @@ public class AdHandler {
                     .bodyValue(AdBoardResponseItem.success(result))
             )
             .transform(ResponseTransformers.errorResponseTransformer());
+    }
+
+    public Mono<ServerResponse> findAllActive(final ServerRequest request) {
+        var limit = request.queryParam("limit")
+            .map(Integer::valueOf)
+            .orElse(null);
+        return service.findAllActive(limit)
+            .collectList()
+            .flatMap(result ->
+                ServerResponse.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(AdBoardResponseItem.success(result))
+            )
+            .transform(ResponseTransformers.errorResponseTransformer());
+
     }
 }

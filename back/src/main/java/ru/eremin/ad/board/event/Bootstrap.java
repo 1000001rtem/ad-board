@@ -1,5 +1,9 @@
 package ru.eremin.ad.board.event;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -10,11 +14,6 @@ import ru.eremin.ad.board.storage.model.Ad;
 import ru.eremin.ad.board.storage.model.Category;
 import ru.eremin.ad.board.storage.repository.AdRepository;
 import ru.eremin.ad.board.storage.repository.CategoryRepository;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.UUID;
 
 import static ru.eremin.ad.board.storage.model.enumirate.AdType.FREE;
 import static ru.eremin.ad.board.storage.model.enumirate.AdType.PAID;

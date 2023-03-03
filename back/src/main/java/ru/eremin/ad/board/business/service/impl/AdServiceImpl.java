@@ -1,5 +1,8 @@
 package ru.eremin.ad.board.business.service.impl;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.reactive.TransactionalOperator;
@@ -16,10 +19,6 @@ import ru.eremin.ad.board.storage.model.Ad;
 import ru.eremin.ad.board.storage.model.Category;
 import ru.eremin.ad.board.storage.model.enumirate.AdType;
 import ru.eremin.ad.board.storage.repository.AdRepository;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 import static ru.eremin.ad.board.util.error.Errors.AD_DOES_NOT_EXIST;
 import static ru.eremin.ad.board.util.error.Errors.BAD_REQUEST;
@@ -50,8 +49,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Flux<AdDto> findAllActive() {
-        return repository.findAllActive()
+    public Flux<AdDto> findAllActive(Integer limit) {
+        return repository.findAllActive(limit)
             .filterWhen(ad -> deactivateIfOverdue(ad).map(Ad::isActive))
             .map(AdDto::new)
             .as(transactionalOperator::transactional)

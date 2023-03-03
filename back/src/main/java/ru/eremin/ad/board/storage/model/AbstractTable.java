@@ -1,8 +1,7 @@
 package ru.eremin.ad.board.storage.model;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
+import lombok.Data;
 
 /**
  * Base database fields

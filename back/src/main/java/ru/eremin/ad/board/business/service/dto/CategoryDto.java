@@ -1,12 +1,11 @@
 package ru.eremin.ad.board.business.service.dto;
 
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import ru.eremin.ad.board.storage.model.Category;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor

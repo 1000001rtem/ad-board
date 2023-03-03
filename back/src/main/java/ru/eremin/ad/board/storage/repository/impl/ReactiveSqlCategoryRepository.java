@@ -1,5 +1,6 @@
 package ru.eremin.ad.board.storage.repository.impl;
 
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Query;
@@ -8,8 +9,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.eremin.ad.board.storage.model.Category;
 import ru.eremin.ad.board.storage.repository.CategoryRepository;
-
-import java.util.UUID;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
 

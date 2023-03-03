@@ -279,4 +279,50 @@ public class AdControllerTest {
             .jsonPath("$.error.message").isEqualTo("Category with id " + categoryId + " does not exist")
             .jsonPath("$.error.displayMessage").isEqualTo("Something went wrong");
     }
+
+    @Test
+    public void should_return_all_active(){
+        List.of(
+            TestUtils.defaultAd(),
+            TestUtils.defaultAd(),
+            TestUtils.defaultAd().setActive(false)
+        ).forEach(it -> adRepository.save(it).block());
+
+        client.get()
+            .uri(uriBuilder ->
+                uriBuilder
+                    .path("/api/v1/ad/find-all-active")
+                    .build()
+            )
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .consumeWith(TestUtils.logConsumer(mapper, log))
+            .jsonPath("$.status").isEqualTo("SUCCESS")
+            .jsonPath("$.data.length()").isEqualTo("2");
+    }
+
+    @Test
+    public void should_return_all_active_with_limit(){
+        List.of(
+            TestUtils.defaultAd(),
+            TestUtils.defaultAd(),
+            TestUtils.defaultAd(),
+            TestUtils.defaultAd().setActive(false)
+        ).forEach(it -> adRepository.save(it).block());
+
+        client.get()
+            .uri(uriBuilder ->
+                    uriBuilder
+                        .path("/api/v1/ad/find-all-active")
+                        .queryParam("limit", 2)
+                        .build()
+            )
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .consumeWith(TestUtils.logConsumer(mapper, log))
+            .jsonPath("$.status").isEqualTo("SUCCESS")
+            .jsonPath("$.data.length()").isEqualTo("2");
+    }
 }

@@ -1,11 +1,10 @@
 package ru.eremin.ad.board.route.dto;
 
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
-import java.time.Instant;
 
 @Data
 @NoArgsConstructor
