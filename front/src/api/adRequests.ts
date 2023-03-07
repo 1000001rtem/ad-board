@@ -1,5 +1,5 @@
 import { standardRequest } from '../utils/request/request'
-import { IAd }             from "../model/ad"
+import { IAd } from '../model/ad'
 
 export const getAdByCategory = (categoryId: string) => {
     const options = {
@@ -17,7 +17,7 @@ export const findAllActive = (limit?: number) => {
         method: 'GET',
         url: `/api/v1/ad/find-all-active`,
         params: {
-            'limit': limit,
+            limit: limit,
         },
     }
     return standardRequest<IAd[]>(options)

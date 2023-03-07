@@ -7,14 +7,14 @@ export const standardRequest = <T>(options: AxiosRequestConfig): Promise<IRespon
         .then((response) => {
             return {
                 success: true,
-                data: response.data.data
+                data: response.data.data,
             }
         })
         .catch((error) => {
             return {
                 success: false,
                 error: {
-                    message: error.message ?? STANDARD_ERROR_MESSAGE
+                    message: error.message ?? STANDARD_ERROR_MESSAGE,
                 },
             }
         })

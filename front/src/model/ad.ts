@@ -9,9 +9,7 @@ export interface IAd {
     endDate?: string
 }
 
-export enum AdType{
+export enum AdType {
     PAID,
-    FREE
+    FREE,
 }
-
-

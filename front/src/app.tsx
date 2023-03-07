@@ -5,10 +5,12 @@ import { Footer } from './containers/footer/Footer'
 import { Body } from './app.styled'
 import { Menu } from './containers/menu/menu'
 import { Main } from './containers/main/main'
-import { CircularProgress, Grid } from '@mui/material'
+import { Grid } from '@mui/material'
 import { CategoryContainer } from './containers/categoryContainer/categoryContainer'
 import { useSelector } from 'react-redux'
 import { RootState } from './store/store'
+import { Loader } from './components/loader/loader'
+import { AdContainer } from './containers/adContainer/adContainer'
 
 function App() {
     const { loading } = useSelector((state: RootState) => {
@@ -26,14 +28,12 @@ function App() {
                         <Menu />
                     </Grid>
                     <Grid container xs={10} sx={{ backgroundColor: 'peru' }}>
-                        {loading ? (
-                            <CircularProgress color={'inherit'} />
-                        ) : (
-                            <Routes>
-                                <Route path={'/'} element={<Main />} />
-                                <Route path={'/category/:categoryId'} element={<CategoryContainer />} />
-                            </Routes>
-                        )}
+                        {loading && <Loader />}
+                        <Routes>
+                            <Route path={'/'} element={<Main />} />
+                            <Route path={'/category/:categoryId'} element={<CategoryContainer />} />
+                            <Route path={'/ad/:adId'} element={<AdContainer />} />
+                        </Routes>
                     </Grid>
                 </Grid>
             </Body>
