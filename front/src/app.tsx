@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Header } from './containers/header/Header'
-import { Footer } from './containers/footer/Footer'
+import { Header } from './containers/header/header'
+import { Footer } from './containers/footer/footer'
 import { Body } from './app.styled'
 import { Menu } from './containers/menu/menu'
 import { Main } from './containers/main/main'
@@ -23,7 +23,7 @@ function App() {
         <>
             <Header />
             <Body>
-                <Grid container spacing={2} alignItems={'stretch'} sx={{ minHeight: 'inherit' }}>
+                <Grid container spacing={2} marginTop={0} alignItems={'stretch'} sx={{ minHeight: 'inherit' }}>
                     <Grid container xs={2} sx={{ backgroundColor: 'pink' }}>
                         <Menu />
                     </Grid>

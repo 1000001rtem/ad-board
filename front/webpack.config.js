@@ -1,7 +1,7 @@
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
-
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = env => ({
     mode: 'development',
     entry: './index.tsx',
@@ -19,7 +19,7 @@ module.exports = env => ({
         proxy: {
             '/api': {
                 target: 'http://localhost:3000',
-                router: () => 'http://localhost:8080',
+                router: () => 'http://localhost:8180',
                 logLevel: 'debug' /*optional*/
             }
         }
@@ -39,7 +39,8 @@ module.exports = env => ({
             {
                 test: /\.css$/i,
                 use: ["style-loader", "css-loader"],
-            }
+            },
+            { test: /\.json$/, type: 'json' }
         ]
     },
     resolve: {
