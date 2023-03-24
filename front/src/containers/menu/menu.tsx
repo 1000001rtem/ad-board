@@ -13,7 +13,6 @@ export const Menu = () => {
 
     useEffect(() => {
         getAllCategories().then((response) => {
-            console.log(response)
             if (response.success) {
                 setCategories(response.data)
             }
