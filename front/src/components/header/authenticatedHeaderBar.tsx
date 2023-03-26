@@ -37,7 +37,7 @@ export const AuthenticatedHeaderBar = () => {
                         <Typography variant={'body1'}>{`${user?.surname} ${user?.name}`}</Typography>
                     </Grid>
                     <Grid item>
-                        <AccountCircleRounded style={pointer} />
+                        <AccountCircleRounded style={pointer} onClick={() => keycloak.logout()} />
                     </Grid>
                 </Grid>
             </Grid>

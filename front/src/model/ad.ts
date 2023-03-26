@@ -10,6 +10,6 @@ export interface IAd {
 }
 
 export enum AdType {
-    PAID,
-    FREE,
+    PAID = 'PAID',
+    FREE = 'FREE',
 }

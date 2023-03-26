@@ -1,11 +1,11 @@
 import React = require('react')
 import { Grid } from '@mui/material'
-import { Center, HeaderStyles } from '../../app.styled'
+import { Center, HEADER_HEIGHT, HeaderStyles } from '../../app.styled'
 import { HeaderBar } from '../../components/header/headerBar'
 
 export const Header = () => {
     return (
-        <HeaderStyles>
+        <HeaderStyles minHeight={HEADER_HEIGHT}>
             <Grid container sx={{ flexGrow: 1 }}>
                 <Grid xs={10} />
                 <Grid xs={2}>

@@ -1,10 +1,13 @@
 import React = require('react')
-import { ListItemText, MenuItem, MenuList } from '@mui/material'
-import { PaddingWrapper } from '../../components/paddingWrapper/paddingWrapper'
+import { ListItemText, MenuItem, MenuList, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { ICategory } from '../../model/category'
 import { getAllCategories } from '../../api/categoryRequests'
 import { useNavigate } from 'react-router'
+import { MainLogo, MenuStyles } from './menu.styled'
+// @ts-ignore
+import logo from '/public/logo.png'
+import { pointer } from '../../app.styled'
 
 export const Menu = () => {
     const [categories, setCategories] = useState<ICategory[]>([])
@@ -24,7 +27,11 @@ export const Menu = () => {
     }
 
     return (
-        <PaddingWrapper>
+        <MenuStyles>
+            <MainLogo>
+                <img src={logo} style={pointer} onClick={() => navigate('/')} />
+            </MainLogo>
+            <Typography color={'gray'}>Категории</Typography>
             <MenuList>
                 {categories.map((category) => {
                     return (
@@ -34,6 +41,6 @@ export const Menu = () => {
                     )
                 })}
             </MenuList>
-        </PaddingWrapper>
+        </MenuStyles>
     )
 }

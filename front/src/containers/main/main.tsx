@@ -8,7 +8,7 @@ export const Main = () => {
     const [adList, setAdList] = useState<IAd[]>([])
 
     useEffect(() => {
-        findAllActive(3).then((result) => setAdList(result.data))
+        findAllActive(6).then((result) => setAdList(result.data))
     }, [])
 
     return <AdBox ads={adList} />

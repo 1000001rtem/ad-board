@@ -31,9 +31,15 @@ public class Bootstrap {
     public void initData() {
         var vehicleCategory = UUID.randomUUID();
         var foodCategory = UUID.randomUUID();
+        var electronicsCategory = UUID.randomUUID();
+        var clothingCategory = UUID.randomUUID();
+        var servicesCategory = UUID.randomUUID();
         List.of(
             new Category().setId(vehicleCategory).setCategoryName("Транспортные средства"),
-            new Category().setId(foodCategory).setCategoryName("Продукты питания")
+            new Category().setId(foodCategory).setCategoryName("Продукты питания"),
+            new Category().setId(electronicsCategory).setCategoryName("Электроника"),
+            new Category().setId(clothingCategory).setCategoryName("Одежда и обувь"),
+            new Category().setId(servicesCategory).setCategoryName("Услуги")
         ).forEach(it -> {
             categoryRepository
                 .save(it)
@@ -63,7 +69,34 @@ public class Bootstrap {
                 .setText("Продаю zuko")
                 .setCategoryId(foodCategory)
                 .setType(FREE)
-                .setActive(false)
+                .setActive(false),
+            new Ad()
+                .setTheme("Продам велосипед")
+                .setText("Велосипед в хорошем состоянии")
+                .setCategoryId(vehicleCategory)
+                .setType(FREE),
+            new Ad()
+                .setTheme("Продам яблоки")
+                .setText("Свежие яблоки с собственного сада")
+                .setCategoryId(foodCategory)
+                .setType(FREE),
+            new Ad()
+                .setTheme("Требуются официанты")
+                .setText("Требуются официанты в ресторан")
+                .setCategoryId(servicesCategory)
+                .setType(PAID)
+                .setEndDate(LocalDateTime.now().plus(7, ChronoUnit.DAYS)),
+            new Ad()
+                .setTheme("Продам телевизор")
+                .setText("Телевизор Samsung, 42 дюйма")
+                .setCategoryId(electronicsCategory)
+                .setType(FREE),
+            new Ad()
+                .setTheme("Скидки на одежду")
+                .setText("Большие скидки на одежду в магазине")
+                .setCategoryId(clothingCategory)
+                .setType(PAID)
+                .setEndDate(LocalDateTime.now().plus(14, ChronoUnit.DAYS))
         ).forEach(it -> {
             adRepository
                 .save(it)
