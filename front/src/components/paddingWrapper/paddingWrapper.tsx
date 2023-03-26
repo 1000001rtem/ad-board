@@ -1,11 +1,17 @@
 import React = require('react')
-import { CardBoxWrapper } from './cardBox.styled'
+import { PaddingWrapperBox } from './paddingWrapper.styled'
 import { Grid } from '@mui/material'
 
-export const PaddingWrapper = ({ children }) => {
+interface IProps {
+    value?: number
+    children: any
+}
+
+export const PaddingWrapper = (props: IProps) => {
+    const { value, children } = props
     return (
-        <CardBoxWrapper>
+        <PaddingWrapperBox value={value}>
             <Grid container>{children}</Grid>
-        </CardBoxWrapper>
+        </PaddingWrapperBox>
     )
 }

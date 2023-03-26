@@ -2,14 +2,14 @@ const path = require('path');
 const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = env => ({
+module.exports = (env) => ({
     mode: 'development',
     entry: './index.tsx',
     devtool: 'inline-source-map',
     output: {
         path: path.join(__dirname, '/dist'),
         filename: 'bundle.js',
-        publicPath: '/'
+        publicPath: '/',
     },
     devtool: 'inline-source-map',
     devServer: {
@@ -20,16 +20,16 @@ module.exports = env => ({
             '/api': {
                 target: 'http://localhost:3000',
                 router: () => 'http://localhost:8180',
-                logLevel: 'debug' /*optional*/
-            }
-        }
+                logLevel: 'debug' /*optional*/,
+            },
+        },
     },
     module: {
         rules: [
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader'
+                loader: 'babel-loader',
             },
             {
                 test: /\.tsx?$/,
@@ -37,21 +37,27 @@ module.exports = env => ({
                 exclude: /node_modules/,
             },
             {
-                test: /\.css$/i,
-                use: ["style-loader", "css-loader"],
+                test: /\.(jpg|png)$/,
+                use: {
+                    loader: 'url-loader',
+                },
             },
-            { test: /\.json$/, type: 'json' }
-        ]
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
+            { test: /\.json$/, type: 'json' },
+        ],
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
-    plugins:[
+    plugins: [
         new HtmlWebpackPlugin({
-            template: './public/index.html'
+            template: './public/index.html',
         }),
         new Dotenv({
-            path: `./.env.${env}`
-        })
-    ]
+            path: `./.env.${env}`,
+        }),
+    ],
 })

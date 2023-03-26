@@ -1,5 +1,6 @@
 export const AdCardStyles = {
-    width: '250px',
-    height: '300px',
+    width: '330px',
+    height: '330px',
     margin: '10px',
+    cursor: 'pointer',
 }
