@@ -16,6 +16,8 @@ import ru.eremin.ad.board.util.error.Errors;
 import ru.eremin.ad.board.util.transformer.ResponseTransformers;
 import ru.eremin.ad.board.util.validation.ValidationService;
 
+import static ru.eremin.ad.board.input.route.RouteConfiguration.EMAIL_HEADER;
+
 @Component
 @RequiredArgsConstructor
 public class AdHandler {
@@ -58,9 +60,10 @@ public class AdHandler {
     }
 
     public Mono<ServerResponse> create(final ServerRequest request) {
+        var email = request.headers().firstHeader(EMAIL_HEADER);
         return request.bodyToMono(CreateAdRequest.class)
             .flatMap(validationService::validate)
-            .flatMap(service::create)
+            .flatMap(it -> service.create(it, email))
             .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
@@ -70,9 +73,10 @@ public class AdHandler {
     }
 
     public Mono<ServerResponse> update(final ServerRequest request) {
+        var email = request.headers().firstHeader(EMAIL_HEADER);
         return request.bodyToMono(UpdateAdRequest.class)
             .flatMap(validationService::validate)
-            .flatMap(service::updateAd)
+            .flatMap(it -> service.updateAd(it, email))
             .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
@@ -82,9 +86,10 @@ public class AdHandler {
     }
 
     public Mono<ServerResponse> upgrade(final ServerRequest request) {
+        var email = request.headers().firstHeader(EMAIL_HEADER);
         return request.bodyToMono(UpgradeAdRequest.class)
             .flatMap(validationService::validate)
-            .flatMap(service::upgradeAd)
+            .flatMap(it -> service.upgradeAd(it, email))
             .flatMap(result ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)

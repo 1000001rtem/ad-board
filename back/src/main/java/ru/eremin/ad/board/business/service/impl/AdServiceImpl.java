@@ -24,6 +24,7 @@ import static ru.eremin.ad.board.util.error.Errors.AD_DOES_NOT_EXIST;
 import static ru.eremin.ad.board.util.error.Errors.BAD_REQUEST;
 import static ru.eremin.ad.board.util.error.Errors.CATEGORY_DOES_NOT_EXIST;
 import static ru.eremin.ad.board.util.error.Errors.EMPTY_DURATION;
+import static ru.eremin.ad.board.util.error.Errors.WRONG_USER;
 
 @Service
 public class AdServiceImpl implements AdService {
@@ -78,7 +79,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Mono<UUID> create(final CreateAdRequest request) {
+    public Mono<UUID> create(final CreateAdRequest request, final String userId) {
         return validateCreateRequest(request)
             .then(checkCategoryExist(request.getCategoryId()))
             .flatMap(categoryId -> {
@@ -86,12 +87,14 @@ public class AdServiceImpl implements AdService {
                     ? LocalDateTime.now().plus(request.getDuration(), ChronoUnit.DAYS)
                     : null;
                 return repository.save(
-                    new Ad()
+                    (Ad) new Ad()
                         .setTheme(request.getTheme())
                         .setText(request.getText())
                         .setType(request.getType())
                         .setCategoryId(categoryId)
                         .setEndDate(endDate)
+                        .setLastModifiedUser(userId)
+                        .setCreateUser(userId)
                 );
             })
             .map(Ad::getId)
@@ -100,13 +103,14 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Mono<UUID> updateAd(final UpdateAdRequest request) {
+    public Mono<UUID> updateAd(final UpdateAdRequest request, final String userId) {
         return Mono.just(request)
             .flatMap(req -> {
                 if (req.getId() == null) return Mono.error(BAD_REQUEST.format("id").asException());
                 return repository.findById(req.getId())
                     .switchIfEmpty(Mono.error(AD_DOES_NOT_EXIST.format(req.getId().toString()).asException()))
                     .flatMap(ad -> {
+                        if (!userId.equals(ad.getCreateUser())) return Mono.error(WRONG_USER.asException());
                         if (req.getNewCategoryId() != null) {
                             return checkCategoryExist(req.getNewCategoryId())
                                 .map(ad::setCategoryId);
@@ -116,7 +120,8 @@ public class AdServiceImpl implements AdService {
                     .flatMap(ad -> {
                         ad
                             .setText(req.getNewText() != null ? req.getNewText() : ad.getText())
-                            .setTheme(req.getNewTheme() != null ? req.getNewTheme() : ad.getTheme());
+                            .setTheme(req.getNewTheme() != null ? req.getNewTheme() : ad.getTheme())
+                            .setLastModifiedUser(userId);
                         return repository.update(ad);
                     });
             })
@@ -126,7 +131,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Mono<UUID> upgradeAd(final UpgradeAdRequest request) {
+    public Mono<UUID> upgradeAd(final UpgradeAdRequest request, final String userId) {
         return Mono.just(request)
             .flatMap(req -> {
                 if (req.getId() == null) return Mono.error(BAD_REQUEST.format("id").asException());
@@ -134,9 +139,11 @@ public class AdServiceImpl implements AdService {
                 return repository.findById(req.getId())
                     .switchIfEmpty(Mono.error(AD_DOES_NOT_EXIST.format(req.getId().toString()).asException()))
                     .flatMap(ad -> {
+                        if (!userId.equals(ad.getCreateUser())) return Mono.error(WRONG_USER.asException());
                         ad
                             .setType(AdType.PAID)
-                            .setEndDate(LocalDateTime.now().plus(req.getDuration(), ChronoUnit.DAYS));
+                            .setEndDate(LocalDateTime.now().plus(req.getDuration(), ChronoUnit.DAYS))
+                            .setLastModifiedUser(userId);
                         return repository.update(ad);
                     });
             })

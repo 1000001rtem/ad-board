@@ -14,13 +14,18 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class RouteConfiguration {
 
+    public static final String EMAIL_HEADER = "email";
+    public static final String FIRST_NAME_HEADER = "firstName";
+    public static final String LAST_NAME_HEADER = "lastName";
+
     @Bean
     RouterFunction<ServerResponse> categoryRoute(final CategoryHandler handler) {
         return route()
             .path("/api/v1/category", builder ->
-                builder
-                    .GET("/all", accept(MediaType.APPLICATION_JSON), handler::findAll)
-                    .POST("/create", accept(MediaType.APPLICATION_JSON), handler::create))
+                    builder
+                        .GET("/all", accept(MediaType.APPLICATION_JSON), handler::findAll)
+//                      .POST("/create", accept(MediaType.APPLICATION_JSON), handler::create)
+            )
             .build();
     }
 

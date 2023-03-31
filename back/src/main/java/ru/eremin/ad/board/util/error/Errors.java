@@ -5,7 +5,7 @@ public enum Errors implements Error {
     EMPTY_DURATION("Required duration for ad with type PAID", "Something went wrong"),
     CATEGORY_DOES_NOT_EXIST("Category with id %s does not exist", "Something went wrong"),
     AD_DOES_NOT_EXIST("Ad with id %s does not exist", "Something went wrong"),
-    ;
+    WRONG_USER("Create user does`n equal modify user", "Something went wrong");
 
     /**
      * Error code

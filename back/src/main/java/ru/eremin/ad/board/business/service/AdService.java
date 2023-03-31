@@ -58,9 +58,10 @@ public interface AdService {
      * Executed transactionally.
      *
      * @param request request to create
+     * @param userId  id of creator
      * @return {@link Mono} ads id
      */
-    Mono<UUID> create(final CreateAdRequest request);
+    Mono<UUID> create(final CreateAdRequest request, final String userId);
 
     /**
      * Update ad.
@@ -68,9 +69,10 @@ public interface AdService {
      * Executed transactionally.
      *
      * @param request request to update
+     * @param userId  id of creator
      * @return {@link Mono} updated ads id
      */
-    Mono<UUID> updateAd(final UpdateAdRequest request);
+    Mono<UUID> updateAd(final UpdateAdRequest request, final String userId);
 
     /**
      * Upgrading an ad to a paid one.
@@ -78,7 +80,8 @@ public interface AdService {
      * Executed transactionally.
      *
      * @param request request to upgrade
+     * @param userId  id of creator
      * @return {@link Mono} upgraded ads id
      */
-    Mono<UUID> upgradeAd(final UpgradeAdRequest request);
+    Mono<UUID> upgradeAd(final UpgradeAdRequest request, final String userId);
 }
