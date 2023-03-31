@@ -2,6 +2,11 @@ package ru.eremin.ad.board.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +22,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.test.StepVerifier;
+import ru.eremin.ad.board.AdBoardApplication;
+import ru.eremin.ad.board.config.TestSecurityConfiguration;
 import ru.eremin.ad.board.input.route.dto.CreateAdRequest;
 import ru.eremin.ad.board.input.route.dto.UpdateAdRequest;
 import ru.eremin.ad.board.input.route.dto.UpgradeAdRequest;
@@ -27,21 +34,15 @@ import ru.eremin.ad.board.output.storage.repository.AdRepository;
 import ru.eremin.ad.board.output.storage.repository.CategoryRepository;
 import ru.eremin.ad.board.util.TestUtils;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
 @ExtendWith(SpringExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest(classes = {AdBoardApplication.class, TestSecurityConfiguration.class})
 public class AdControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(CategoryControllerTest.class);
@@ -82,7 +83,8 @@ public class AdControllerTest {
             TestUtils.defaultAd()
         ).forEach(ad -> adRepository.save(ad).block());
 
-        client.get()
+        client
+            .get()
             .uri(uriBuilder ->
                 uriBuilder
                     .path("/api/v1/ad/find-by-category")
@@ -209,6 +211,7 @@ public class AdControllerTest {
         client.put()
             .uri("/api/v1/ad/update")
             .contentType(APPLICATION_JSON)
+            .header("email", "test")
             .body(BodyInserters.fromValue(
                 mapper.writeValueAsString(new UpdateAdRequest(ad.getId(), null, "new text", null)))
             )
@@ -234,6 +237,7 @@ public class AdControllerTest {
         client.put()
             .uri("/api/v1/ad/upgrade")
             .contentType(APPLICATION_JSON)
+            .header("email", "test")
             .body(BodyInserters.fromValue(
                 mapper.writeValueAsString(new UpgradeAdRequest(ad.getId(), 5L)))
             )
@@ -281,7 +285,7 @@ public class AdControllerTest {
     }
 
     @Test
-    public void should_return_all_active(){
+    public void should_return_all_active() {
         List.of(
             TestUtils.defaultAd(),
             TestUtils.defaultAd(),
@@ -303,7 +307,7 @@ public class AdControllerTest {
     }
 
     @Test
-    public void should_return_all_active_with_limit(){
+    public void should_return_all_active_with_limit() {
         List.of(
             TestUtils.defaultAd(),
             TestUtils.defaultAd(),
@@ -313,10 +317,10 @@ public class AdControllerTest {
 
         client.get()
             .uri(uriBuilder ->
-                    uriBuilder
-                        .path("/api/v1/ad/find-all-active")
-                        .queryParam("limit", 2)
-                        .build()
+                uriBuilder
+                    .path("/api/v1/ad/find-all-active")
+                    .queryParam("limit", 2)
+                    .build()
             )
             .exchange()
             .expectStatus().isOk()

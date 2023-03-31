@@ -1,5 +1,9 @@
 package ru.eremin.ad.board.unit.business.service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -21,12 +25,8 @@ import ru.eremin.ad.board.output.storage.repository.AdRepository;
 import ru.eremin.ad.board.util.error.AdBoardException;
 import ru.eremin.ad.board.util.error.Errors;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
@@ -134,7 +134,7 @@ public class AdServiceTest {
         UUID categoryId = UUID.randomUUID();
         CreateAdRequest request = new CreateAdRequest("", "", AdType.FREE, categoryId, null);
 
-        subj.create(request)
+        subj.create(request, "test")
             .as(StepVerifier::create)
             .expectErrorMatches(error -> {
                 assertTrue(error instanceof AdBoardException);
@@ -152,7 +152,7 @@ public class AdServiceTest {
         when(categoryService.findById(any())).thenReturn(Mono.empty());
         CreateAdRequest request = new CreateAdRequest("", "", AdType.PAID, UUID.randomUUID(), null);
 
-        subj.create(request)
+        subj.create(request, "test")
             .as(StepVerifier::create)
             .expectErrorMatches(error -> {
                 assertTrue(error instanceof AdBoardException);
@@ -173,7 +173,7 @@ public class AdServiceTest {
         UUID id = UUID.randomUUID();
         UpdateAdRequest request = new UpdateAdRequest(id, "", "", null);
 
-        subj.updateAd(request)
+        subj.updateAd(request, "test")
             .as(StepVerifier::create)
             .expectErrorMatches(error -> {
                 assertTrue(error instanceof AdBoardException);
@@ -194,7 +194,7 @@ public class AdServiceTest {
 
         UpdateAdRequest request = new UpdateAdRequest(UUID.randomUUID(), "", "", categoryId);
 
-        subj.updateAd(request)
+        subj.updateAd(request, "test")
             .as(StepVerifier::create)
             .expectErrorMatches(error -> {
                 assertTrue(error instanceof AdBoardException);
@@ -216,15 +216,39 @@ public class AdServiceTest {
 
         UpdateAdRequest request = new UpdateAdRequest(UUID.randomUUID(), "new", "new", null);
 
-        subj.updateAd(request)
+        subj.updateAd(request, "test")
             .as(StepVerifier::create)
-            .expectNext(ad.getId())
+            .expectNextMatches(it -> {
+                assertNotNull(ad.getId());
+                assertEquals("test", ad.getLastModifiedUser());
+                return true;
+            })
             .verifyComplete();
 
         assertEquals(ad.getId(), captor.getValue().getId());
         assertEquals("new", captor.getValue().getText());
         assertEquals("new", captor.getValue().getTheme());
         assertEquals(ad.getCategoryId(), captor.getValue().getCategoryId());
+    }
+
+    @Test
+    public void should_return_error_when_update_and_creator_does_not_equal_last_user() {
+        UUID categoryId = UUID.randomUUID();
+        when(adRepository.findById(any())).thenReturn(Mono.just(defaultAd()));
+        when(categoryService.findById(eq(categoryId))).thenReturn(Mono.empty());
+
+        UpdateAdRequest request = new UpdateAdRequest(UUID.randomUUID(), "", "", categoryId);
+
+        subj.updateAd(request, "wrong")
+            .as(StepVerifier::create)
+            .expectErrorMatches(error -> {
+                assertTrue(error instanceof AdBoardException);
+                assertEquals(Errors.WRONG_USER.name(), ((AdBoardException) error).getCode());
+                return true;
+            })
+            .verify();
+
+        verify(adRepository, never()).update(any());
     }
 
     //upgrade
@@ -236,7 +260,7 @@ public class AdServiceTest {
         UUID id = UUID.randomUUID();
         UpgradeAdRequest request = new UpgradeAdRequest(id, 5L);
 
-        subj.upgradeAd(request)
+        subj.upgradeAd(request, "test")
             .as(StepVerifier::create)
             .expectErrorMatches(error -> {
                 assertTrue(error instanceof AdBoardException);
@@ -257,9 +281,13 @@ public class AdServiceTest {
         when(adRepository.update(captor.capture())).thenReturn(Mono.just(ad));
 
         UpgradeAdRequest request = new UpgradeAdRequest(ad.getId(), 5L);
-        subj.upgradeAd(request)
+        subj.upgradeAd(request, "test")
             .as(StepVerifier::create)
-            .expectNext(ad.getId())
+            .expectNextMatches(it -> {
+                assertNotNull(ad.getId());
+                assertEquals("test", ad.getLastModifiedUser());
+                return true;
+            })
             .verifyComplete();
 
         assertEquals(ad.getId(), captor.getValue().getId());
@@ -268,5 +296,26 @@ public class AdServiceTest {
             LocalDateTime.now().truncatedTo(ChronoUnit.DAYS),
             captor.getValue().getEndDate().minus(5, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS)
         );
+    }
+
+    @Test
+    public void should_return_error_when_upgrade_and_creator_does_not_equal_last_user() {
+        Ad ad = defaultAd();
+        ArgumentCaptor<Ad> captor = ArgumentCaptor.forClass(Ad.class);
+        when(adRepository.findById(eq(ad.getId()))).thenReturn(Mono.just(ad));
+        when(adRepository.update(captor.capture())).thenReturn(Mono.just(ad));
+
+        UpgradeAdRequest request = new UpgradeAdRequest(ad.getId(), 5L);
+
+        subj.upgradeAd(request, "wrong")
+            .as(StepVerifier::create)
+            .expectErrorMatches(error -> {
+                assertTrue(error instanceof AdBoardException);
+                assertEquals(Errors.WRONG_USER.name(), ((AdBoardException) error).getCode());
+                return true;
+            })
+            .verify();
+
+        verify(adRepository, never()).update(any());
     }
 }

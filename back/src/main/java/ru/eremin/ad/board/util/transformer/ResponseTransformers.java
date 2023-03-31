@@ -26,6 +26,7 @@ public class ResponseTransformers {
             .onErrorResume(err -> {
                 if (err instanceof AdBoardException) {
                     final AdBoardException error = (AdBoardException) err;
+                    log.error(error);
                     return ServerResponse.status(getResponseCode(error.getCode()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(AdBoardResponseItem.error(buildErrorResponse(error)));

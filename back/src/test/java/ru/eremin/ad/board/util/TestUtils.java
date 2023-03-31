@@ -2,15 +2,14 @@ package ru.eremin.ad.board.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import org.slf4j.Logger;
-import org.springframework.test.web.reactive.server.EntityExchangeResult;
-import ru.eremin.ad.board.output.storage.model.Ad;
-import ru.eremin.ad.board.output.storage.model.enumirate.AdType;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.function.Consumer;
+import org.slf4j.Logger;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import ru.eremin.ad.board.output.storage.model.Ad;
+import ru.eremin.ad.board.output.storage.model.enumirate.AdType;
 
 public class TestUtils {
 
@@ -33,11 +32,12 @@ public class TestUtils {
     }
 
     public static Ad defaultAd() {
-        return new Ad()
+        return (Ad) new Ad()
             .setTheme("test theme")
             .setText("test text")
             .setType(AdType.FREE)
             .setCategoryId(UUID.randomUUID())
-            .setStartDate(LocalDateTime.now());
+            .setStartDate(LocalDateTime.now())
+            .setCreateUser("test");
     }
 }

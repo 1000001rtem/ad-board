@@ -7,8 +7,8 @@ import org.springframework.data.relational.core.query.Update;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.eremin.ad.board.output.storage.repository.AdRepository;
 import ru.eremin.ad.board.output.storage.model.Ad;
+import ru.eremin.ad.board.output.storage.repository.AdRepository;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;
