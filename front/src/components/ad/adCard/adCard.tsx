@@ -1,11 +1,11 @@
 import React = require('react')
 import { Card, Grid, Typography } from '@mui/material'
 import { AdCardStyles } from './adCard.styled'
-import { AdType, IAd } from '../../model/ad'
+import { AdType, IAd } from '../../../model/ad'
 import { useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { setCurrentAd } from '../../store/slices/adSlice'
-import { PaddingWrapper } from '../paddingWrapper/paddingWrapper'
+import { setCurrentAd } from '../../../store/slices/adSlice'
+import { PaddingWrapper } from '../../paddingWrapper/paddingWrapper'
 // @ts-ignore
 import defaultPic from '/public/empty.png'
 import { Star } from '@mui/icons-material'
@@ -28,7 +28,7 @@ export const AdCard = (props: IProps) => {
     return (
         <Card style={AdCardStyles} onClick={handleClick}>
             {ad.type === AdType.PAID && <Star sx={{ color: 'gold', float: 'right' }} />}
-            <PaddingWrapper value={20}>
+            <PaddingWrapper padding={20}>
                 <Grid container direction={'column'}>
                     <img src={defaultPic} />
                     <Typography>{ad.theme}</Typography>

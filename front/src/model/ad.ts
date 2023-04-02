@@ -7,6 +7,7 @@ export interface IAd {
     active: boolean
     startDate: string
     endDate?: string
+    createUser: string
 }
 
 export enum AdType {

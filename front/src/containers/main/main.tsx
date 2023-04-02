@@ -1,6 +1,6 @@
 import React = require('react')
 import { IAd } from '../../model/ad'
-import { AdBox } from '../../components/adBox/adBox'
+import { AdBox } from '../../components/ad/adBox/adBox'
 import { useEffect, useState } from 'react'
 import { findAllActive } from '../../api/adRequests'
 

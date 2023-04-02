@@ -1,6 +1,6 @@
 import React = require('react')
 import { ListItemText, MenuItem, MenuList, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { ICategory } from '../../model/category'
 import { getAllCategories } from '../../api/categoryRequests'
 import { useNavigate } from 'react-router'
@@ -8,16 +8,25 @@ import { MainLogo, MenuStyles } from './menu.styled'
 // @ts-ignore
 import logo from '/public/logo.png'
 import { pointer } from '../../app.styled'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../store/store'
+import { setCategoryList } from '../../store/slices/categorySlice'
 
 export const Menu = () => {
-    const [categories, setCategories] = useState<ICategory[]>([])
+    const dispatch = useDispatch()
+
+    const { categories } = useSelector((state: RootState) => {
+        return {
+            categories: state.category.categoryList,
+        }
+    })
 
     const navigate = useNavigate()
 
     useEffect(() => {
         getAllCategories().then((response) => {
             if (response.success) {
-                setCategories(response.data)
+                dispatch(setCategoryList(response.data))
             }
         })
     }, [])
