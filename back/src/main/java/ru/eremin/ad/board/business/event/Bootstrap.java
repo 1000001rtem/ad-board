@@ -58,12 +58,14 @@ public class Bootstrap {
                 .setText("У нас автосалон и много машин")
                 .setCategoryId(vehicleCategory)
                 .setType(PAID)
-                .setEndDate(LocalDateTime.now().plus(42, ChronoUnit.DAYS)),
+                .setEndDate(LocalDateTime.now().plus(42, ChronoUnit.DAYS))
+                .setCreateUser("test@test.com"),
             new Ad()
                 .setTheme("Продам картошку")
                 .setText("Продаю картошку")
                 .setCategoryId(foodCategory)
-                .setType(FREE),
+                .setType(FREE)
+                .setCreateUser("test@test.com"),
             new Ad()
                 .setTheme("Продам zuko")
                 .setText("Продаю zuko")
@@ -99,7 +101,7 @@ public class Bootstrap {
                 .setEndDate(LocalDateTime.now().plus(14, ChronoUnit.DAYS))
         ).forEach(it -> {
             adRepository
-                .save(it)
+                .save((Ad) it)
                 .doOnSuccess(ad -> log.info(ad.getTheme() + " - " + ad.getId()))
                 .block();
         });
