@@ -1,11 +1,11 @@
 import React = require('react')
 import { useParams } from 'react-router'
 import { useEffect, useState } from 'react'
-import { IAd } from '../../model/ad'
-import { getAdByCategory } from '../../api/adRequests'
-import { AdBox } from '../../components/ad/adBox/adBox'
+import { IAd } from '../../../model/ad'
+import { getAdByCategory } from '../../../api/adRequests'
+import { AdBox } from '../../../components/ad/adBox/adBox'
 import { useDispatch } from 'react-redux'
-import { setLoading } from '../../store/slices/appSlice'
+import { setLoading } from '../../../store/slices/appSlice'
 
 export const CategoryContainer = () => {
     const [adList, setAdList] = useState<IAd[]>([])
