@@ -21,6 +21,7 @@ public class AdDto {
     private AdType type;
     private UUID categoryId;
     private boolean active;
+    private String createUser;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
@@ -32,6 +33,7 @@ public class AdDto {
         this.categoryId = ad.getCategoryId();
         this.active = ad.isActive();
         this.startDate = ad.getStartDate();
+        this.createUser = ad.getCreateUser();
         this.endDate = ad.getEndDate();
     }
 }

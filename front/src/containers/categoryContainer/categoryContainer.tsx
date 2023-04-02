@@ -3,7 +3,7 @@ import { useParams } from 'react-router'
 import { useEffect, useState } from 'react'
 import { IAd } from '../../model/ad'
 import { getAdByCategory } from '../../api/adRequests'
-import { AdBox } from '../../components/adBox/adBox'
+import { AdBox } from '../../components/ad/adBox/adBox'
 import { useDispatch } from 'react-redux'
 import { setLoading } from '../../store/slices/appSlice'
 

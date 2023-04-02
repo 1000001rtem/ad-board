@@ -70,6 +70,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public Mono<AdDto> findById(final UUID id) {
         return repository.findById(id)
+            .switchIfEmpty(Mono.error(AD_DOES_NOT_EXIST.format(id.toString()).asException()))
             .flatMap(ad -> deactivateIfOverdue(ad).flatMap(
                 it -> it.isActive() ? Mono.just(it) : Mono.empty()
             ))

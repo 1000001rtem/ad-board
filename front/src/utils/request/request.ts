@@ -1,7 +1,19 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { IResponse } from '../../model/response'
+import keycloak from '../../../keycloak'
 
-export const standardRequest = <T>(options: AxiosRequestConfig): Promise<IResponse<T>> => {
+export const standardNotAuthorizeRequest = <T>(options: AxiosRequestConfig): Promise<IResponse<T>> => {
+    return standardRequest(options)
+}
+
+export const standardAuthorizeRequest = <T>(options: AxiosRequestConfig): Promise<IResponse<T>> => {
+    options.headers = {
+        Authorization: 'Bearer ' + keycloak.token,
+    }
+    return standardRequest(options)
+}
+
+const standardRequest = <T>(options: AxiosRequestConfig): Promise<IResponse<T>> => {
     return axios
         .request(options)
         .then((response) => {
@@ -14,7 +26,7 @@ export const standardRequest = <T>(options: AxiosRequestConfig): Promise<IRespon
             return {
                 success: false,
                 error: {
-                    message: error.message ?? STANDARD_ERROR_MESSAGE,
+                    message: error.response.data.error.displayMessage ?? STANDARD_ERROR_MESSAGE,
                 },
             }
         })

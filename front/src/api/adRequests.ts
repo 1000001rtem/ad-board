@@ -1,4 +1,4 @@
-import { standardRequest } from '../utils/request/request'
+import { standardAuthorizeRequest, standardNotAuthorizeRequest } from '../utils/request/request'
 import { IAd } from '../model/ad'
 
 export const getAdByCategory = (categoryId: string) => {
@@ -9,7 +9,7 @@ export const getAdByCategory = (categoryId: string) => {
             'category-id': categoryId,
         },
     }
-    return standardRequest<IAd[]>(options)
+    return standardNotAuthorizeRequest<IAd[]>(options)
 }
 
 export const findAllActive = (limit?: number) => {
@@ -20,5 +20,25 @@ export const findAllActive = (limit?: number) => {
             limit: limit,
         },
     }
-    return standardRequest<IAd[]>(options)
+    return standardNotAuthorizeRequest<IAd[]>(options)
+}
+
+export const findById = (id: string) => {
+    const options = {
+        method: 'GET',
+        url: `/api/v1/ad/find-by-id`,
+        params: {
+            id,
+        },
+    }
+    return standardNotAuthorizeRequest<IAd>(options)
+}
+
+export const updateAd = (request) => {
+    const options = {
+        method: 'PUT',
+        url: `/api/v1/ad/update`,
+        data: request,
+    }
+    return standardAuthorizeRequest<string>(options)
 }
