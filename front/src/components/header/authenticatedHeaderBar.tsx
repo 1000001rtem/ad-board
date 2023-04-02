@@ -1,15 +1,17 @@
 import React = require('react')
 import { Grid, Typography } from '@mui/material'
-import { AccountCircleRounded, Notifications } from '@mui/icons-material'
+import { AccountCircleRounded, Add, Notifications } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 import { useKeycloak } from '@react-keycloak/web'
 import { useEffect } from 'react'
 import { setCurrentUser } from '../../store/slices/userSlice'
 import { pointer } from '../../app.styled'
+import { useNavigate } from 'react-router'
 
 export const AuthenticatedHeaderBar = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const { keycloak } = useKeycloak()
     const { user } = useSelector((state: RootState) => {
         return {
@@ -28,6 +30,9 @@ export const AuthenticatedHeaderBar = () => {
 
     return (
         <Grid container direction={'row'} justifyContent={'center'} spacing={4}>
+            <Grid item>
+                <Add style={pointer} onClick={() => navigate('/ad/create-ad')} />
+            </Grid>
             <Grid item>
                 <Notifications />
             </Grid>

@@ -7,7 +7,7 @@ import { RootState } from '../../../store/store'
 import { CategorySelector } from '../categorySelector/categorySelector'
 
 interface IProps {
-    ad: IAd
+    ad?: IAd
     isEdit: boolean
 }
 
@@ -28,19 +28,19 @@ export const AdInfo = (props: IProps) => {
                         id={'theme'}
                         fullWidth
                         label={'Название'}
-                        defaultValue={ad.theme}
+                        defaultValue={ad?.theme}
                         size={'small'}
                         inputProps={{ readOnly: !isEdit }}
                     />
                 </Grid>
                 <Grid item>
                     {isEdit ? (
-                        <CategorySelector category={ad.categoryId} />
+                        <CategorySelector category={ad?.categoryId} />
                     ) : (
                         <TextField
                             fullWidth
                             label={'Категория'}
-                            defaultValue={categories.find((it) => it.id === ad.categoryId)?.categoryName}
+                            defaultValue={categories.find((it) => it.id === ad?.categoryId)?.categoryName}
                             size={'small'}
                             inputProps={{ readOnly: true }}
                         />
@@ -51,7 +51,7 @@ export const AdInfo = (props: IProps) => {
                         id={'description'}
                         fullWidth
                         label={'Описание'}
-                        defaultValue={ad.text}
+                        defaultValue={ad?.text}
                         inputProps={{ readOnly: !isEdit }}
                         multiline
                     />

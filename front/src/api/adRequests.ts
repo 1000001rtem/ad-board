@@ -34,6 +34,15 @@ export const findById = (id: string) => {
     return standardNotAuthorizeRequest<IAd>(options)
 }
 
+export const createAd = (request) => {
+    const options = {
+        method: 'POST',
+        url: `/api/v1/ad/create`,
+        data: request,
+    }
+    return standardAuthorizeRequest<string>(options)
+}
+
 export const updateAd = (request) => {
     const options = {
         method: 'PUT',

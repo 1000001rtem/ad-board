@@ -1,20 +1,18 @@
 import React = require('react')
-import { Edit } from '@mui/icons-material'
 import { Button, Grid, useFormControl } from '@mui/material'
 // @ts-ignore
 import defaultPic from '/public/empty.png'
 import { useEffect, useState } from 'react'
-import { IAd } from '../../model/ad'
-import { findById, updateAd } from '../../api/adRequests'
+import { IAd } from '../../../model/ad'
+import { findById, updateAd } from '../../../api/adRequests'
 import { useParams } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { setLoading } from '../../store/slices/appSlice'
-import { AdInfo } from '../../components/ad/adInfo/adInfo'
-import { PaddingWrapper } from '../../components/paddingWrapper/paddingWrapper'
+import { setLoading } from '../../../store/slices/appSlice'
+import { AdInfo } from '../../../components/ad/adInfo/adInfo'
+import { PaddingWrapper } from '../../../components/paddingWrapper/paddingWrapper'
 import { useKeycloak } from '@react-keycloak/web'
-import { pointer } from '../../app.styled'
-import { IError } from '../../model/common'
-import { Error } from '../../components/error/error'
+import { IError } from '../../../model/common'
+import { Error } from '../../../components/error/error'
 
 export const AdContainer = () => {
     const [ad, setAd] = useState<IAd>()
@@ -45,14 +43,16 @@ export const AdContainer = () => {
 
     const showEditIcon = () => !isEdit && keycloak.authenticated && ad.createUser === keycloak.tokenParsed?.email
 
-    const handleSaveAd = (event) => {
+    const handleUpdateAd = (event) => {
         event.preventDefault()
+
         const request = {
             id: ad.id,
             newTheme: event.target.elements.theme.value,
             newText: event.target.elements.description.value,
             newCategoryId: event.target.category.value,
         }
+
         updateAd(request).then((it) => {
             if (!it.success) {
                 setError({
@@ -73,12 +73,17 @@ export const AdContainer = () => {
                     <Grid container direction={'column'}>
                         {showEditIcon() && (
                             <Grid item>
-                                <PaddingWrapper right={110}>
-                                    <Edit style={pointer} sx={{ float: 'right' }} onClick={() => setIsEdit(true)} />
+                                <PaddingWrapper right={80}>
+                                    <Button
+                                        variant={'outlined'}
+                                        sx={{ float: 'right' }}
+                                        onClick={() => setIsEdit(true)}>
+                                        Редактировать
+                                    </Button>
                                 </PaddingWrapper>
                             </Grid>
                         )}
-                        <form onSubmit={handleSaveAd}>
+                        <form onSubmit={handleUpdateAd}>
                             <Grid item>
                                 <Grid container>
                                     <Grid item xs={3}>
@@ -91,7 +96,13 @@ export const AdContainer = () => {
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid item>{isEdit && <Button type='submit'>Сохранить</Button>}</Grid>
+                            <Grid item>
+                                {isEdit && (
+                                    <Button variant={'contained'} type='submit'>
+                                        Сохранить
+                                    </Button>
+                                )}
+                            </Grid>
                         </form>
                     </Grid>
                 )

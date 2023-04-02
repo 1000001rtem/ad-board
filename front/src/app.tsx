@@ -6,11 +6,12 @@ import { Body, HEADER_HEIGHT } from './app.styled'
 import { Menu } from './containers/menu/menu'
 import { Main } from './containers/main/main'
 import { Grid } from '@mui/material'
-import { CategoryContainer } from './containers/categoryContainer/categoryContainer'
 import { useSelector } from 'react-redux'
 import { RootState } from './store/store'
 import { Loader } from './components/loader/loader'
-import { AdContainer } from './containers/adContainer/adContainer'
+import { CreateAdContainer } from './containers/ad/createAdContainer/createAdContainer'
+import { AdContainer } from './containers/ad/adContainer/adContainer'
+import { CategoryContainer } from './containers/category/categoryContainer/categoryContainer'
 
 function App() {
     const { loading } = useSelector((state: RootState) => {
@@ -36,6 +37,7 @@ function App() {
                                 <Route path={'/'} element={<Main />} />
                                 <Route path={'/category/:categoryId'} element={<CategoryContainer />} />
                                 <Route path={'/ad/:adId'} element={<AdContainer />} />
+                                <Route path={'/ad/create-ad'} element={<CreateAdContainer />} />
                             </Routes>
                         </Grid>
                     </Grid>
