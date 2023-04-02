@@ -1,4 +1,4 @@
-import { standardRequest } from '../utils/request/request'
+import { standardNotAuthorizeRequest } from '../utils/request/request'
 import { ICategory } from '../model/category'
 
 export const getAllCategories = () => {
@@ -6,5 +6,5 @@ export const getAllCategories = () => {
         method: 'GET',
         url: `/api/v1/category/all`,
     }
-    return standardRequest<ICategory[]>(options)
+    return standardNotAuthorizeRequest<ICategory[]>(options)
 }
