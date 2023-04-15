@@ -158,7 +158,7 @@ public class AdControllerTest {
     }
 
     @Test
-    void should_return_null_in_formal_response_if_ad_not_found() {
+    void should_return_error_if_ad_not_found() {
         client.get()
             .uri(uriBuilder ->
                 uriBuilder
@@ -167,11 +167,12 @@ public class AdControllerTest {
                     .build()
             )
             .exchange()
-            .expectStatus().isOk()
+            .expectStatus().is5xxServerError()
             .expectBody()
             .consumeWith(TestUtils.logConsumer(mapper, log))
-            .jsonPath("$.status").isEqualTo("SUCCESS")
-            .jsonPath("$.data").isEmpty();
+            .jsonPath("$.status").isEqualTo("ERROR")
+            .jsonPath("$.data").isEmpty()
+            .jsonPath("$.error.code").isEqualTo("AD_DOES_NOT_EXIST");
     }
 
     @Test
