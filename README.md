@@ -1,4 +1,4 @@
-#Ad Board
+# Ad Board
 
 Demo project for ad board application
 
@@ -34,7 +34,7 @@ Demo project for ad board application
 - build: `npm build`
 
 ## Links
-[repository](https://github.com/1000001rtem/elasticsearch-example)
+[repository](https://github.com/1000001rtem/ad-board)
 
 [keycloak realm](realm-export.json)
 
