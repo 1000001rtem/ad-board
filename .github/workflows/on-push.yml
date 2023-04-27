@@ -3,13 +3,29 @@ name: Build
 on: push
 
 jobs:
-  push:
-    name: onPush
+  back:
+    name: back-checks
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build
+        working-directory: ./back
         run: ./gradlew clean assemble
       - name: Tests
+        working-directory: ./back
         run: ./gradlew clean test
+  front:
+    name: front-checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Clean
+        run: rm -rf node_modules/
+      - name: Install Dependencies
+        working-directory: ./front
+        run: npm install
+      - name: Build
+        working-directory: ./front
+        run: npm run build
+
